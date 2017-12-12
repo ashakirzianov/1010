@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import { connect } from "react-redux";
-import { Store } from "../reducers";
+import { Store } from "../store";
 import { setFoo } from "../actions";
 import { AnyAction, Dispatch } from "redux";
 

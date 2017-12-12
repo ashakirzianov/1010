@@ -9,9 +9,9 @@
     "full": "npm run build && npm run test && npm run lint && npm run site",
     "test": "mocha -r ts-node/register src/test-setup.ts src/**/*.spec.ts src/**/*.spec.tsx",
     "lint": "tslint ./src/**",
-    "typescript-build": "./node_modules/typescript/bin/tsc",
-    "webpack-build": "webpack --p --progress",
-    "build": "npm run webpack-build",
+    "build:ts": "./node_modules/typescript/bin/tsc",
+    "build:wp": "webpack --p --progress",
+    "build": "npm run build:wp",
     "start": "node ./index.js",
     "eb-start": "npm start",
     "site": "webpack --progress --colors --watch & webpack-dev-server --progress --colors --open"
