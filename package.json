@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "local-init": "npm install -g webpack && npm install -g webpack-dev-server",
-    "preinstall": "npm run build",
+    "postinstall": "npm run build",
     "full": "npm run build && npm run test && npm run lint && npm run site",
     "test": "mocha -r ts-node/register src/test-setup.ts src/**/*.spec.ts src/**/*.spec.tsx",
     "lint": "tslint ./src/**",
