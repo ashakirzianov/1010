@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ColorCode } from "../Game";
+import { ColorCode } from "../game";
 import { Palette, VisualSettings, visualSettings } from "../visuals";
 import { mapMatrix } from "../utils";
 import { Grid } from "./RenderComps";
