@@ -53,11 +53,11 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "typescript": "^2.6.2",
+    "source-map-loader": "^0.2.3",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
     "react-addons-test-utils": "^15.6.2",
-    "source-map-loader": "^0.2.3",
     "ts-node": "^3.3.0",
     "tslint": "^5.8.0"
   }

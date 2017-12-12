@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Shape, ColorCode, Figure, Board, Game, PlayArea } from "../Game";
+import { Shape, ColorCode, Figure, Board, Game, PlayArea } from "../game";
 import { GameGrid } from "./GameGrid";
 import { mapMatrix } from "../utils";
 import { Stack, Line } from "./RenderComps";
