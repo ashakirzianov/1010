@@ -2,10 +2,7 @@ import * as React from "react";
 
 type SFC<T> = React.SFC<T>;
 
-type Color = string;
-type Palette = {
-    cell: { 0: string },
-};
+export type Color = string;
 
 export const Line: SFC<{}> = props =>
     <div style={{
@@ -15,7 +12,7 @@ export const Line: SFC<{}> = props =>
 export const Stack: SFC<{}> = props =>
     <div style={{ display: "inline-block" }}>{props.children}</div>;
 
-export const Cell: SFC<{
+export const GridCell: SFC<{
         color: string,
         size: number,
         borderRadius?: number,
@@ -30,8 +27,9 @@ export const Cell: SFC<{
             display: "inline-block",
         }}/>;
 
+export type GridCellType = { color: Color };
 export const Grid: SFC<{
-    rows: Array<Array<{ color: Color }>>,
+    rows: GridCellType[][],
     cellSize: number,
     borderRadius?: number,
     margin?: number,
@@ -39,7 +37,7 @@ export const Grid: SFC<{
     <Stack>{
         props.rows.map((r, i) =>
         <Line key={i}>
-            { r.map((c, j) => <Cell
+            { r.map((c, j) => <GridCell
                 key={j}
                 color={c.color}
                 size={props.cellSize}
