@@ -1,12 +1,12 @@
 import { combineReducers, AnyAction } from "redux";
+import { Store } from "./store";
 
-export type Store = { foo: string, bar: number };
 function foo(store: Store, action: AnyAction): Store {
-    return { ...store, foo: store.foo + store.foo };
+    return { ...store };
 }
 
 function bar(store: Store, action: AnyAction): Store {
-    return { ...store, bar: store.bar + store.bar };
+    return { ...store };
 }
 
 export const reducer = combineReducers<Store>({
