@@ -29,4 +29,6 @@ export const App: React.SFC<{}> = props =>
     <Grid
         rows={ makeRows(3, 5) }
         cellSize={50}
+        borderRadius={5}
+        margin={3}
     />;
