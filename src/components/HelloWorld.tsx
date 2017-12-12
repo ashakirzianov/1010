@@ -5,18 +5,9 @@ import { Store } from "../store";
 import { setFoo } from "../actions";
 import { AnyAction, Dispatch } from "redux";
 
-// class HelloWorldBase extends Component<{
-//     name: string,
-//     setFoo: (foo: string) => void,
-// }, {}> {
-//     render() {
-//         return <div className="main">Hello, { this.props.name }!</div>;
-//     }
-// }
-
-const HelloWorldBase = (props: {
+export const HelloWorld = (props: {
     name: string,
-    setFoo: (foo: string) => void,
+    setFoo?: (foo: string) => void,
 }) =>
     <div className="main">Hello, { props.name }!</div>;
 
@@ -32,6 +23,6 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>, own: { name: string }
     };
 }
 
-export const HelloWorld = connect(
+export const HelloWorldConnected = connect(
     mapStateToProps,
-    mapDispatchToProps)(HelloWorldBase);
+    mapDispatchToProps)(HelloWorld);
