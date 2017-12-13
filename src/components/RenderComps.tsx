@@ -3,15 +3,15 @@ import * as React from "react";
 type SFC<T> = React.SFC<T>;
 
 export const Line: SFC<{}> = props =>
-<div style={{ display: "block" }}>
+    <div style={{ display: "block" }}>
         {
             props.children instanceof Array ?
-            props.children.map(ch => <div style={{ display: "inline-block" }}>{ch}</div>)
-            : props.children
+                props.children.map(ch => <div style={{ display: "inline-block" }}>{ch}</div>)
+                : props.children
         }
     </div>;
 export const Stack: SFC<{}> = props =>
-<div style={{ display: "block" }}>{props.children}</div>;
+    <div style={{ display: "block" }}>{props.children}</div>;
 
 export type Color = string;
 export type GridCell = { color: Color };
