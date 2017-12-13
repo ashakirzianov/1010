@@ -2,39 +2,26 @@ import * as React from "react";
 
 type SFC<T> = React.SFC<T>;
 
-export type Color = string;
-
 export const Line: SFC<{}> = props =>
-    <div style={{
-        display: "block",
-        // marginBottom: -4, // TODO: find out better way
-    }}>{props.children}</div>;
+<div style={{ display: "block" }}>
+        {
+            props.children instanceof Array ?
+            props.children.map(ch => <div style={{ display: "inline-block" }}>{ch}</div>)
+            : props.children
+        }
+    </div>;
 export const Stack: SFC<{}> = props =>
-    <div style={{ display: "inline-block" }}>{props.children}</div>;
+<div style={{ display: "block" }}>{props.children}</div>;
 
-// export const GridCell: SFC<{
-//     color: string,
-//     size: number,
-//     borderRadius?: number,
-//     margin?: number,
-// }> = props =>
-//         <div style={{
-//             background: props.color,
-//             width: props.size,
-//             height: props.size,
-//             borderRadius: props.borderRadius,
-//             margin: props.margin,
-//             display: "inline-block",
-//         }} />;
-
-export type GridCellType = { color: Color };
+export type Color = string;
+export type GridCell = { color: Color };
 export const Grid: SFC<{
-    rows: GridCellType[][],
+    rows: GridCell[][],
     cellSize: number,
     borderRadius?: number,
     margin?: number,
 }> = props =>
-        <table style={{ display: "inline-block", borderSpacing: props.margin }}>
+        <table style={{ borderSpacing: props.margin }}>
             {props.rows.map(row =>
                 <tr>{row.map(col =>
                     <td style={{
@@ -44,5 +31,4 @@ export const Grid: SFC<{
                         borderRadius: props.borderRadius,
                     }} />)}
                 </tr>)}
-        </table>
-    ;
+        </table>;
