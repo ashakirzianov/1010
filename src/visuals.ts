@@ -15,7 +15,7 @@ export type VisualSettings = {
 
 export const visualSettings: VisualSettings = {
     palette: {
-        blocks: ["red", "green", "blue", "yellow", "orange", "pink"],
+        blocks: ["red", "green", "blue", "yellow", "orange", "pink", "magenta"],
         empty: "grey",
         none: "transparent", // TODO: get correct color
     },

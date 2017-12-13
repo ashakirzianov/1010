@@ -2,7 +2,8 @@ import * as React from "react";
 import { Grid } from "./RenderComps";
 import { PlayArea, Board, Cell } from "../game";
 import { PlayAreaComp } from "./GameComps";
-import { range } from "../utils";
+import { range, pickRandom } from "../utils";
+import { allFigures } from "../figures";
 
 function makeBoard(): Board {
     return {
@@ -12,31 +13,7 @@ function makeBoard(): Board {
 
 const testPlayArea: PlayArea = {
     board: makeBoard(),
-    availableFigures: [
-        {
-            color: 0,
-            shape: [
-                [1, 1, 1],
-                [1, 1, 1],
-                [1, 1, 1],
-            ],
-        },
-        {
-            color: 2,
-            shape: [
-                [1, 1, 1],
-                [1, 0, 0],
-                [1, 0, 0],
-            ],
-        },
-        {
-            color: 4,
-            shape: [
-                [1, 1],
-                [1, 0],
-            ],
-        },
-    ],
+    availableFigures: range(0, 3).map(i => pickRandom(allFigures)),
 };
 
 export const App: React.SFC<{}> = props =>
