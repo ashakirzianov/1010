@@ -15,9 +15,17 @@ export type VisualSettings = {
 
 export const visualSettings: VisualSettings = {
     palette: {
-        blocks: ["red", "green", "blue", "yellow", "orange", "pink", "magenta"],
-        empty: "grey",
-        none: "transparent", // TODO: get correct color
+        blocks: [
+            "#3F2E56", // Big square
+            "#F7DD72", // Big corner
+            "#C6CA53", // Small square
+            "#ED6A5A", // Dot
+            "#9BC1BC", // Small corner
+            "#ACACDE", // Big plank
+            "#ABDAFC", // Small plank
+        ],
+        empty: "#BBBBBB",
+        none: "rgba(0, 0, 0, 0)", // TODO: get correct color
     },
     cellSize: 30,
     cellMargin: 3,
