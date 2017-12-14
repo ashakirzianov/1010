@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { moveUp, getAllFigures, moveLeft, makeFigure, makeFigures, ShapeFlat, makeRotations } from "./figures";
+import { moveUp, getAllFigures, moveLeft, makeFigure, makeFigures, ShapeFlat, makeRotations, trimShape } from "./figures";
 
 describe("Figures", () => {
     it("moveUp", () => {
@@ -28,9 +28,9 @@ describe("Figures", () => {
 
     it("makeFigure", () => {
         expect(makeFigure(2)([
-            1, 1, 1,
-            0, 0, 0,
-            0, 0, 0,
+            [1, 1, 1],
+            [0, 0, 0],
+            [0, 0, 0],
         ])).to.be.deep.eq({
             shape: [
                 [1, 1, 1],
@@ -82,19 +82,30 @@ describe("Figures", () => {
             {
                 shape: [
                     [1, 1, 1],
-                    [0, 0, 0],
-                    [0, 0, 0],
                 ],
                 color: 0,
             },
             {
                 shape: [
-                    [1, 0, 0],
-                    [1, 0, 0],
-                    [1, 0, 0],
+                    [1],
+                    [1],
+                    [1],
                 ],
                 color: 0,
             },
+        ]);
+    });
+
+    it("trimShape", () => {
+        expect(trimShape([
+            [0, 0, 0, 0],
+            [0, 0, 1, 0],
+            [0, 1, 0, 1],
+            [0, 0, 1, 0],
+        ])).to.be.deep.eq([
+            [0, 1, 0],
+            [1, 0, 1],
+            [0, 1, 0],
         ]);
     });
 });
