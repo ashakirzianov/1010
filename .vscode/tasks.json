@@ -5,9 +5,11 @@
     "tasks": [
         {
             "label": "build",
-            "type": "npm",
-            "script": "build:ts",
-            "problemMatcher": []
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ]
         }
     ]
 }

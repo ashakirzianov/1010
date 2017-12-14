@@ -9,7 +9,7 @@
     "full": "npm run build && npm run test && npm run lint && npm run site",
     "test": "mocha -r ts-node/register src/test-setup.ts src/**/*.spec.ts src/**/*.spec.tsx",
     "lint": "tslint ./src/**",
-    "build:ts": "./node_modules/typescript/bin/tsc",
+    "build:ts": "tsc",
     "build:wp": "webpack --p --progress",
     "build": "npm run build:wp",
     "start": "node ./index.js",
