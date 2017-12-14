@@ -1,5 +1,5 @@
-import { sameArrays, distinct, flatten, matricify, mapMatrix } from "./utils";
-import { ShapeCell, Figure, ColorCode } from "./game";
+import { sameArrays, distinct, flatten, matricify, mapMtx, reduceMtx, subMtx } from "./utils";
+import { ShapeCell, Figure, ColorCode, Shape } from "./game";
 
 export type ShapeFlat = ShapeCell[];
 const allShapes: ShapeFlat[] = [
@@ -82,10 +82,26 @@ export function makeRotations(shape: ShapeFlat): ShapeFlat[] {
     return distinct<ShapeFlat>(sameArrays)([r0, r1, r2, r3]);
 }
 
+export function trimShape(shape: Shape): Shape {
+    const borders = reduceMtx(shape, (acc, el, idx) => el === 0 ? acc : ({
+        startRow: Math.min(idx[0], acc.startRow),
+        startCol: Math.min(idx[1], acc.startCol),
+        endRow: Math.max(idx[0] + 1, acc.endRow),
+        endCol: Math.max(idx[1] + 1, acc.endCol),
+    }), {
+        startRow: shape.length,
+        startCol: shape[0].length,
+        endRow: 0,
+        endCol: 0,
+    });
+
+    return subMtx(borders)(shape);
+}
+
 export function makeFigure(color: ColorCode) {
-    return function f(flatShape: ShapeFlat) {
+    return function f(shape: Shape) {
         return {
-            shape: matricify(3)(flatShape),
+            shape: shape,
             color: color,
         };
     };
@@ -95,7 +111,10 @@ export function makeFigures(shapes: ShapeFlat[]): Figure[] {
     return flatten(shapes
         .map((shape, i) =>
             makeRotations(shape)
-                .map(makeFigure(i))));
+                .map(matricify(3))
+                .map(trimShape)
+                .map(makeFigure(i))
+            ));
 }
 
 export function getAllFigures() {

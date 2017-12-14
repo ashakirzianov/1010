@@ -24,19 +24,50 @@ export function makeRows(n: number, m: number) {
             j => ({ color: pickRandom(colors) })));
 }
 
-export function mapMatrix<T, U>(mtx: T[][], f: (x: T) => U): U[][] {
+export function mapMtx<T, U>(mtx: T[][], f: (x: T) => U): U[][] {
     return mtx.map(row => row.map(f));
+}
+
+function reduceMtxHelper<T, U>(mtx: T[][], f: (acc: U, curr: T, idx: [number, number]) => U, init: U): U {
+    let acc = init;
+    for (let i = 0; i < mtx.length; i++) {
+        for (let j = 0; j < mtx[i].length; j++) {
+            if (i !== 0 || j !== 0) {
+                acc = f(acc, mtx[i][j], [i, j]);
+            }
+        }
+    }
+
+    return acc;
+}
+
+export function reduceMtx<T>(mtx: T[][], f: (acc: T, curr: T, idx: [number, number]) => T): T;
+export function reduceMtx<T, U>(mtx: T[][], f: (acc: U, curr: T, idx: [number, number]) => U, init: U): U;
+export function reduceMtx<T, U>(mtx: T[][], f: (acc: U, curr: T, idx: [number, number]) => U, init?: U): U {
+    const acc = init === undefined ?
+        mtx[0][0] as any
+        : f(init, mtx[0][0], [0, 0]);
+    return reduceMtxHelper(mtx, f, acc);
+}
+
+export type MatrixBorders = {
+    startRow: number,
+    startCol: number,
+    endRow: number,
+    endCol: number,
+};
+export function subMtx(borders: MatrixBorders) {
+    return function f<T>(mtx: T[][]) {
+        return range(borders.startRow, borders.endRow).map(i =>
+            range(borders.startCol, borders.endCol).map(j =>
+                mtx[i][j]));
+    };
 }
 
 export function sameArrays<T>(a1: T[], a2: T[]): boolean {
     return a1.length === a2.length
         && a1.every((x, i) => x === a2[i]);
 }
-
-// export function distinct<T>(arr: T[], comp: (x: T, y: T) => boolean): T[] {
-//     return arr.reduce((acc, curr) =>
-//         acc.some(a => comp(a, curr)) ? acc : acc.concat(curr), new Array<T>());
-// }
 
 export function distinct<T>(comp: (x: T, y: T) => boolean) {
     return function f(arr: T[]) {

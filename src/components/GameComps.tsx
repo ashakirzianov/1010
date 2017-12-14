@@ -1,19 +1,19 @@
 import * as React from "react";
 import { Shape, ColorCode, Figure, Board, Game, PlayArea } from "../game";
 import { GameGrid } from "./GameGrid";
-import { mapMatrix } from "../utils";
+import { mapMtx } from "../utils";
 import { Stack, Line } from "./RenderComps";
 
 type Comp<T> = React.SFC<T>;
 
 export const FigureComp: Comp<Figure> = props =>
     <GameGrid
-        cells={mapMatrix(props.shape, sc => sc === 1 ? props.color : "none")}
+        cells={mapMtx(props.shape, sc => sc === 1 ? props.color : "none")}
     />;
 
 export const BoardComp: Comp<Board> = props =>
     <GameGrid
-        cells={mapMatrix(props.cells, cell =>
+        cells={mapMtx(props.cells, cell =>
             cell.cell === "empty" ? "empty" : cell.color)}
     />;
 

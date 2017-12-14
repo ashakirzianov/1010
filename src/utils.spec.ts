@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { matricify, flatten, distinct, sameArrays } from "./utils";
+import { matricify, flatten, distinct, sameArrays, subMtx } from "./utils";
 
 describe("Utils", () => {
     it("matricify", () => {
@@ -51,6 +51,23 @@ describe("Utils", () => {
             [1, 2, 3],
             [4, 5, 6],
             [7, 8, 9],
+        ]);
+    });
+
+    it("subMtx", () => {
+        expect(subMtx({
+            startRow: 1,
+            startCol: 2,
+            endRow: 3,
+            endCol: 4,
+        })([
+            [1, 2, 3, 4, 5],
+            [6, 7, 8, 9, 0],
+            [1, 2, 3, 4, 5],
+            [6, 7, 8, 9, 0],
+        ])).to.be.deep.eq([
+            [8, 9],
+            [3, 4],
         ]);
     });
 });
