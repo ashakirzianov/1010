@@ -18,7 +18,7 @@ export const BoardComp: SFC<Board> = props =>
     />;
 
 export const PlayAreaComp: SFC<PlayArea> = props =>
-    <Stack>
+    <Stack align="center">
         <Line><BoardComp {...props.board}/></Line>
-        <Line>{props.availableFigures.map(f => <FigureComp {...f}/>)}</Line>
+        <Line align="center">{props.availableFigures.map(f => <FigureComp {...f}/>)}</Line>
     </Stack>;
