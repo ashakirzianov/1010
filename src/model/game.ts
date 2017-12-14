@@ -19,14 +19,20 @@ export type Board = {
 export type PlayArea = {
     board: Board,
     availableFigures: Figure[],
+    figureInHand: number | undefined,
+};
+export type PlayAreaActions = {
+    takeFigure: number | undefined,
 };
 
 export type GameSettings = {
     figureBank: Figure[],
     boardSize: { rows: number, cols: number },
+    handSize: number,
 };
 
 export type Game = {
     playArea: PlayArea,
     settings: GameSettings,
 };
+export type GameActions = PlayAreaActions;

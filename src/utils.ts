@@ -1,7 +1,12 @@
 import { arch } from "os";
 
-export function range(start: number, end: number) {
-    const result = new Array<number>();
+export function range(end: number): number[];
+// tslint:disable-next-line:unified-signatures
+export function range(start: number, end: number): number[];
+export function range(n1: number, n2?: number) {
+    const result: number[] = [];
+    const start = n2 === undefined ? 0 : n1;
+    const end = n2 === undefined ? n1 : n2;
     for (let i = start; i < end; i++) {
         result[i - start] = i;
     }

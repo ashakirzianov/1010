@@ -38,14 +38,6 @@ export const Line: LayoutComp = props =>
         }
     </Div>;
 
-// export const Stack: LayoutComp = props =>
-//     <Div
-//         align={props.align}
-//         margin={props.margin}
-//     >
-//         {props.children}
-//     </Div>;
-
 export const Stack: LayoutComp = props =>
     <Div>
         {

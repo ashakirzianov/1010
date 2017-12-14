@@ -1,4 +1,4 @@
-import { sameArrays, distinct, flatten, matricify, mapMtx, reduceMtx, subMtx } from "./utils";
+import { sameArrays, distinct, flatten, matricify, mapMtx, reduceMtx, subMtx } from "../utils";
 import { ShapeCell, Figure, ColorCode, Shape } from "./game";
 
 export type ShapeFlat = ShapeCell[];
