@@ -4,7 +4,7 @@ type SFC<T> = React.SFC<T>;
 
 export type DisplayValue = "block" | "inline" | "inline-block";
 export type AlignValue = "left" | "center" | "right";
-export const Div: SFC<{
+const Div: SFC<{
     display?: DisplayValue,
     align?: AlignValue,
     margin?: number,
@@ -22,7 +22,7 @@ export type LayoutProps = {
     margin?: number,
 };
 export type LayoutComp = SFC<LayoutProps>;
-export const Line: LayoutComp = props =>
+const Line: LayoutComp = props =>
     <Div>
         {
             props.children instanceof Array ?
@@ -38,7 +38,7 @@ export const Line: LayoutComp = props =>
         }
     </Div>;
 
-export const Stack: LayoutComp = props =>
+const Stack: LayoutComp = props =>
     <Div>
         {
             props.children instanceof Array ? props.children.map(ch =>
@@ -54,7 +54,7 @@ export const Stack: LayoutComp = props =>
 
 export type Color = string;
 export type GridCell = { color: Color };
-export const Grid: SFC<{
+const Grid: SFC<{
     rows: GridCell[][],
     cellSize: number,
     borderRadius?: number,
@@ -74,3 +74,5 @@ export const Grid: SFC<{
                     }} />)}
                 </tr>)}
         </table>;
+
+export { Div, Line, Stack, Grid };

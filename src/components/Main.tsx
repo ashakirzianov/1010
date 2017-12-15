@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PlayArea, Board, Cell, Game } from "../model/game";
-import { PlayAreaComp, GameComp } from "./GameComps";
+import { GameComp } from "./GameComps";
 import { range, pickRandom } from "../utils";
 import { allFigures } from "../model/figures";
 import { createGame } from "../model/logic";

@@ -14,7 +14,7 @@ type GameGridProps = {
     cells: ColorCode[][],
 };
 function makeGameGridComp(vs: VisualSettings): React.SFC<GameGridProps> {
-    const TheGameGridComp: React.SFC<GameGridProps> = props =>
+    const GameGrid: React.SFC<GameGridProps> = props =>
         <Grid
             rows={mapMtx(props.cells, c => ({ color: cellColor(c, vs.palette)}))}
             cellSize={vs.cellSize}
@@ -22,7 +22,7 @@ function makeGameGridComp(vs: VisualSettings): React.SFC<GameGridProps> {
             borderRadius={vs.cornerRadius}
         />;
 
-    return TheGameGridComp;
+    return GameGrid;
 }
 
-export const GameGrid = makeGameGridComp(visualSettings);
+export const ActualGameGrid = makeGameGridComp(visualSettings);
