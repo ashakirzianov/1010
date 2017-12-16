@@ -23,7 +23,7 @@ const PlayAreaComp: Comp<PlayArea, PlayAreaActions> = props =>
     <Stack align="center" margin={10}>
         <Line><BoardComp {...props.board}/></Line>
         <Line align="center" margin={5}>
-            {props.availableFigures.map(f => <FigureComp {...f}/>)}
+            {props.availableFigures.map((f, i) => <FigureComp key={i} {...f}/>)}
         </Line>
     </Stack>;
 

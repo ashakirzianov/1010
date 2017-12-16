@@ -26,8 +26,9 @@ const Line: LayoutComp = props =>
     <Div>
         {
             props.children instanceof Array ?
-                props.children.map(ch =>
+                props.children.map((ch, i) =>
                     <Div
+                        key={i}
                         display="inline-block"
                         align={props.align}
                         margin={props.margin}
@@ -41,14 +42,15 @@ const Line: LayoutComp = props =>
 const Stack: LayoutComp = props =>
     <Div>
         {
-            props.children instanceof Array ? props.children.map(ch =>
-            <Div
-                align={props.align}
-                margin={props.margin}
-            >
-                {ch}
-            </Div>)
-            : props.children
+            props.children instanceof Array ? props.children.map((ch, i) =>
+                <Div
+                    key={i}
+                    align={props.align}
+                    margin={props.margin}
+                >
+                    {ch}
+                </Div>)
+                : props.children
         }
     </Div>;
 
@@ -64,15 +66,17 @@ const Grid: SFC<{
             borderSpacing: props.margin,
             display: "inline",
         }}>
-            {props.rows.map(row =>
-                <tr>{row.map(col =>
-                    <td style={{
-                        background: col.color,
-                        width: props.cellSize,
-                        height: props.cellSize,
-                        borderRadius: props.borderRadius,
-                    }} />)}
-                </tr>)}
+            <tbody>
+                {props.rows.map((row, i) =>
+                    <tr key={i}>{row.map((col, j) =>
+                        <td key={j} style={{
+                            background: col.color,
+                            width: props.cellSize,
+                            height: props.cellSize,
+                            borderRadius: props.borderRadius,
+                        }} />)}
+                    </tr>)}
+            </tbody>
         </table>;
 
 export { Div, Line, Stack, Grid };
