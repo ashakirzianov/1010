@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Actions } from "./comp-utils";
 
 type SFC<T> = React.SFC<T>;
 
@@ -61,8 +62,11 @@ const Grid: SFC<{
     cellSize: number,
     borderRadius?: number,
     margin?: number,
-}> = props =>
-        <table style={{
+    cellBorderColor?: Color,
+} & Actions<{
+    onClick: null,
+}>> = props =>
+        <table onClick={a => props.onClick && props.onClick(null)} style={{
             borderSpacing: props.margin,
             display: "inline",
         }}>
@@ -74,6 +78,9 @@ const Grid: SFC<{
                             width: props.cellSize,
                             height: props.cellSize,
                             borderRadius: props.borderRadius,
+                            borderColor: props.cellBorderColor || col.color,
+                            borderWidth: 3, // TODO: extract as parameter
+                            borderStyle: "solid",
                         }} />)}
                     </tr>)}
             </tbody>

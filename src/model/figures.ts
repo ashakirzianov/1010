@@ -1,5 +1,6 @@
 import { sameArrays, distinct, flatten, matricify, mapMtx, reduceMtx, subMtx } from "../utils";
-import { ShapeCell, Figure, ColorCode, Shape } from "./game";
+import { ShapeCell, Figure, Shape } from "./game";
+import { ColorCode } from "../visuals";
 
 export type ShapeFlat = ShapeCell[];
 const allShapes: ShapeFlat[] = [

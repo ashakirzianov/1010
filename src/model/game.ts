@@ -1,4 +1,4 @@
-export type ColorCode = number | "empty" | "none";
+import { ColorCode } from "../visuals";
 
 export type ShapeCell = 0 | 1;
 export type Shape = ShapeCell[][];
@@ -21,9 +21,6 @@ export type PlayArea = {
     availableFigures: Figure[],
     figureInHand: number | undefined,
 };
-export type PlayAreaActions = {
-    takeFigure: number | undefined,
-};
 
 export type GameSettings = {
     figureBank: Figure[],
@@ -35,4 +32,3 @@ export type Game = {
     playArea: PlayArea,
     settings: GameSettings,
 };
-export type GameActions = PlayAreaActions;
