@@ -1,6 +1,7 @@
 import { combineReducers, AnyAction } from "redux";
 import { Store } from "./store";
 import { PlayArea, GameSettings } from "../model/game";
+import { combineLayers, tryPlaceCurrentFigure } from "../model/logic";
 
 function playArea(store: PlayArea = null as any, action: AnyAction): PlayArea {
     switch (action.type) {
@@ -15,6 +16,8 @@ function playArea(store: PlayArea = null as any, action: AnyAction): PlayArea {
                 ...store,
                 placePosition: action.payload,
             };
+        case "PLACE_ON":
+            return tryPlaceCurrentFigure(store);
         default:
             return store;
     }

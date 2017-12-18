@@ -8,7 +8,7 @@ type GameGridProps = {
     cells: ColorCode[][],
     cellBorderColor?: ColorCode,
 } & Actions<{
-    onClick: null,
+    onClick: [number, number],
     mouseOverCell: [number, number] | undefined,
 }>;
 function makeGameGridComp(vs: VisualSettings): React.SFC<GameGridProps> {

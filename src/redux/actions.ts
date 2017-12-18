@@ -1,3 +1,5 @@
+import { MtxIdx } from "../utils";
+
 export function takeFigure(figureIndex: number | undefined) {
     return {
         type: "TAKE_FIGURE",
@@ -5,12 +7,16 @@ export function takeFigure(figureIndex: number | undefined) {
     };
 }
 
-export function targetOver(targetPosition: [number, number] | undefined) {
+export function targetOver(targetPosition: MtxIdx | undefined) {
     return {
         type: "TARGET_OVER",
-        payload: targetPosition && {
-            row: targetPosition[0],
-            col: targetPosition[1],
-        },
+        payload: targetPosition,
+    };
+}
+
+export function placeOn(position: MtxIdx) {
+    return {
+        type: "PLACE_ON",
+        payload: position,
     };
 }

@@ -1,4 +1,5 @@
 import { ColorCode } from "../visuals";
+import { MtxIdx } from "../utils";
 
 export type ShapeCell = 0 | 1;
 export type Shape = ShapeCell[][];
@@ -17,10 +18,7 @@ export type PlayArea = {
     cells: Cell[][],
     availableFigures: Figure[],
     figureInHand: number | undefined,
-    placePosition?: {
-        row: number,
-        col: number,
-    },
+    placePosition?: MtxIdx,
 };
 
 export type GameSettings = {

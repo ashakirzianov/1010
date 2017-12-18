@@ -1,6 +1,6 @@
 import { Game, GameSettings, PlayArea, Cell, Figure } from "./game";
 import { allFigures } from "./figures";
-import { pickRandom, range, mapMtx } from "../utils";
+import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, itemAtIndex } from "../utils";
 import { ColorCode } from "../visuals";
 
 export const defaultSettings: GameSettings = {
@@ -34,15 +34,15 @@ function buildPlayArea(settings: GameSettings): PlayArea {
 export function makeFigureLayer(
     figure: Figure | undefined,
     size: { rows: number, cols: number },
-    position?: { row: number, col: number },
+    position?: MtxIdx,
 ): Cell[][] {
     return range(size.rows).map(i =>
         range(size.cols).map<Cell>(j =>
             !position || !figure // If there is no position or figure, whole layer is empty
-            || i < position.row || j < position.col // Cell is empty if it's "before" the figure position
-            || figure.shape.length <= i - position.row
-            || figure.shape[0].length <= j - position.col
-            || figure.shape[i - position.row][j - position.col] === 0 // Cell is empty if figure shape is empty
+            || i < position[0] || j < position[1] // Cell is empty if it's "before" the figure position
+            || figure.shape.length <= i - position[0]
+            || figure.shape[0].length <= j - position[1]
+            || figure.shape[i - position[0]][j - position[1]] === 0 // Cell is empty if figure shape is empty
             ? { cell: "empty" }
             : { cell: "full", color: figure.color }));
 }
@@ -60,9 +60,27 @@ export function combineLayers(bottom: Cell[][], top: Cell[][]): Cell[][] {
     });
 }
 
+export function placeFigureOn(layer: Cell[][], figure?: Figure, position?: MtxIdx) {
+    return combineLayers(layer, makeFigureLayer(
+        figure,
+        sizeMtx(layer),
+        position,
+    ));
+}
+
 export function colorFromCell(cell: Cell): ColorCode {
     return cell.cell === "empty" ? "empty"
         : cell.cell === "full" ? cell.color
         : "selected" // TODO: fix
         ;
+}
+
+export function tryPlaceCurrentFigure(playArea: PlayArea): PlayArea {
+    return {
+        ...playArea,
+        cells: placeFigureOn(
+            playArea.cells,
+            itemAtIndex(playArea.availableFigures, playArea.figureInHand),
+            playArea.placePosition),
+    };
 }

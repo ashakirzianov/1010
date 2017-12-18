@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Actions } from "./comp-utils";
+import { MtxIdx } from "../utils";
 
 type SFC<T> = React.SFC<T>;
 
@@ -64,10 +65,10 @@ const Grid: SFC<{
     margin?: number,
     cellBorderColor?: Color,
 } & Actions<{
-    onClick: null,
-    mouseOverCell: [number, number] | undefined,
+    onClick: MtxIdx,
+    mouseOverCell: MtxIdx | undefined,
 }>> = props =>
-        <table onClick={a => props.onClick && props.onClick(null)} style={{
+        <table style={{
             borderSpacing: props.margin,
             display: "inline",
         }}>
@@ -78,6 +79,7 @@ const Grid: SFC<{
                             key={j}
                             onMouseEnter={e => props.mouseOverCell && props.mouseOverCell([i, j])}
                             onMouseLeave={e => props.mouseOverCell && props.mouseOverCell(undefined)}
+                            onClick={a => props.onClick && props.onClick([i, j])}
                             style={{
                                 background: col.color,
                                 width: props.cellSize,

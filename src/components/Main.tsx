@@ -7,10 +7,11 @@ import { createGame } from "../model/logic";
 import { Dispatch, connect, InferableComponentEnhancerWithProps, Component } from "react-redux";
 import { Store } from "../redux/store";
 import { AnyAction } from "redux";
-import { takeFigure, targetOver } from "../redux/actions";
+import { takeFigure, targetOver, placeOn } from "../redux/actions";
 
 const Main: React.SFC<CompProps> = props =>
     <GameComp
+        placeOn={props.placeOn}
         targetOver={props.targetOver}
         takeFigure={props.takeFigure} // TODO: find better solution
         { ...props.game }
@@ -29,6 +30,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>, own: {}) {
     return {
         takeFigure: wrap(takeFigure),
         targetOver: wrap(targetOver),
+        placeOn: wrap(placeOn),
     };
 }
 

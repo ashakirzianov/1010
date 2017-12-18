@@ -1,14 +1,14 @@
 import * as React from "react";
 import { Shape, Figure, Game, PlayArea } from "../model/game";
 import { GameGridComp } from "./GameGrid";
-import { mapMtx, letExp, itemAtIndex, sizeMtx } from "../utils";
+import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx } from "../utils";
 import { Stack, Line } from "./RenderComps";
 import { Actions } from "./comp-utils";
-import { makeFigureLayer, combineLayers, colorFromCell } from "../model/logic";
+import { makeFigureLayer, combineLayers, colorFromCell, placeFigureOn } from "../model/logic";
 
 type Comp<P, A = {}> = React.SFC<P & Actions<A>>;
 
-const FigureComp: Comp<Figure & { selected: boolean }, { onClick: null }> = props =>
+const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
     <GameGridComp
         cellBorderColor={props.selected ? "selected" : undefined}
         onClick={props.onClick}
@@ -16,19 +16,23 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: null }> = prop
     />;
 
 const PlayAreaComp: Comp<PlayArea, {
+    placeOn: MtxIdx,
     takeFigure: number,
-    targetOver: [number, number] | undefined,
+    targetOver: MtxIdx | undefined,
 }> = props =>
         <Stack align="center" margin={10}>
             <Line>
                 <GameGridComp
                     mouseOverCell={props.targetOver}
+                    onClick={props.placeOn}
                     cells={
-                        mapMtx(combineLayers(props.cells, makeFigureLayer(
-                            itemAtIndex(props.availableFigures, props.figureInHand),
-                            sizeMtx(props.cells),
-                            props.placePosition,
-                        )), colorFromCell)
+                        mapMtx(
+                            placeFigureOn(
+                                props.cells,
+                                itemAtIndex(props.availableFigures, props.figureInHand),
+                                props.placePosition
+                            ),
+                            colorFromCell)
                     }
                 />
             </Line>
@@ -47,11 +51,13 @@ const PlayAreaComp: Comp<PlayArea, {
 
 const GameComp: Comp<Game, {
     takeFigure: number,
-    targetOver: [number, number] | undefined,
+    targetOver: MtxIdx | undefined,
+    placeOn: MtxIdx,
 }> = props =>
         <PlayAreaComp
             targetOver={props.targetOver}
             takeFigure={props.takeFigure}
+            placeOn={props.placeOn}
             {...props.playArea}
         />;
 
