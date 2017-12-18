@@ -1,6 +1,6 @@
 import { Game, GameSettings, PlayArea, Cell, Figure } from "./game";
 import { allFigures } from "./figures";
-import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, itemAtIndex } from "../utils";
+import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, itemAtIndex, MtxSize, everyMtx } from "../utils";
 import { ColorCode } from "../visuals";
 
 export const defaultSettings: GameSettings = {
@@ -33,18 +33,18 @@ function buildPlayArea(settings: GameSettings): PlayArea {
 
 export function makeFigureLayer(
     figure: Figure | undefined,
-    size: { rows: number, cols: number },
+    size: MtxSize,
     position?: MtxIdx,
 ): Cell[][] {
     return range(size.rows).map(i =>
         range(size.cols).map<Cell>(j =>
             !position || !figure // If there is no position or figure, whole layer is empty
-            || i < position[0] || j < position[1] // Cell is empty if it's "before" the figure position
-            || figure.shape.length <= i - position[0]
-            || figure.shape[0].length <= j - position[1]
-            || figure.shape[i - position[0]][j - position[1]] === 0 // Cell is empty if figure shape is empty
-            ? { cell: "empty" }
-            : { cell: "full", color: figure.color }));
+                || i < position[0] || j < position[1] // Cell is empty if it's "before" the figure position
+                || figure.shape.length <= i - position[0]
+                || figure.shape[0].length <= j - position[1]
+                || figure.shape[i - position[0]][j - position[1]] === 0 // Cell is empty if figure shape is empty
+                ? { cell: "empty" }
+                : { cell: "full", color: figure.color }));
 }
 
 export function combineLayers(bottom: Cell[][], top: Cell[][]): Cell[][] {
@@ -52,11 +52,11 @@ export function combineLayers(bottom: Cell[][], top: Cell[][]): Cell[][] {
         const bc = bottom[i][j];
         return tc.cell === "empty" ? bc
             : bc.cell === "empty" ? tc
-            : {
-                cell: "conflict",
-                top: tc,
-                bottom: bc,
-            };
+                : {
+                    cell: "conflict",
+                    top: tc,
+                    bottom: bc,
+                };
     });
 }
 
@@ -71,16 +71,29 @@ export function placeFigureOn(layer: Cell[][], figure?: Figure, position?: MtxId
 export function colorFromCell(cell: Cell): ColorCode {
     return cell.cell === "empty" ? "empty"
         : cell.cell === "full" ? cell.color
-        : "selected" // TODO: fix
+            : "selected" // TODO: fix
         ;
 }
 
+export function isFigureOnBoard(figure: Figure, position: MtxIdx, boardSize: MtxSize) {
+    return figure.shape.every((row, i) =>
+        row.every((cell, j) =>
+            cell === 0 || (i + position[0] < boardSize.rows && j + position[1] < boardSize.cols)));
+}
+
 export function tryPlaceCurrentFigure(playArea: PlayArea): PlayArea {
-    return {
-        ...playArea,
-        cells: placeFigureOn(
-            playArea.cells,
-            itemAtIndex(playArea.availableFigures, playArea.figureInHand),
-            playArea.placePosition),
-    };
+    if (playArea.placePosition === undefined || playArea.figureInHand === undefined) {
+        return playArea;
+    }
+
+    const figure = playArea.availableFigures[playArea.figureInHand];
+    const combined = placeFigureOn(
+        playArea.cells,
+        itemAtIndex(playArea.availableFigures, playArea.figureInHand),
+        playArea.placePosition);
+
+    return isFigureOnBoard(figure, playArea.placePosition, sizeMtx(playArea.cells))
+        && everyMtx(combined, cell => cell.cell !== "conflict")
+        ? { ...playArea, cells: combined }
+        : { ...playArea };
 }

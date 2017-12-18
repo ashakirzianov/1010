@@ -31,6 +31,11 @@ export type MtxBorders = {
     endCol: number,
 };
 
+export type MtxSize = {
+    rows: number,
+    cols: number,
+};
+
 export function makeMtx<T>(init: T, rows: number, cols: number): T[][] {
     return range(rows).map(i =>
         range(cols).map(j => init));
@@ -38,6 +43,14 @@ export function makeMtx<T>(init: T, rows: number, cols: number): T[][] {
 
 export function mapMtx<T, U>(mtx: T[][], f: (x: T, idx: MtxIdx) => U): U[][] {
     return mtx.map((row, i) => row.map((col, j) => f(col, [i, j])));
+}
+
+export function someMtx<T>(mtx: Mtx<T>, p: (x: T, idx: MtxIdx) => boolean) {
+    return mtx.some((row, i) => row.some((cell, j) => p(cell, [i, j])));
+}
+
+export function everyMtx<T>(mtx: Mtx<T>, p: (x: T, idx: MtxIdx) => boolean) {
+    return mtx.every((row, i) => row.every((cell, j) => p(cell, [i, j])));
 }
 
 function reduceMtxHelper<T, U>(mtx: T[][], f: (acc: U, curr: T, idx: [number, number]) => U, init: U): U {
@@ -70,7 +83,7 @@ export function subMtx(borders: MtxBorders) {
     };
 }
 
-export function sizeMtx<T>(mtx: T[][]) {
+export function sizeMtx<T>(mtx: T[][]): MtxSize {
     return {
         rows: mtx.length,
         cols: mtx[0].length,

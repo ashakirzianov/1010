@@ -11,7 +11,7 @@ describe("logic", () => {
             ],
         },
             { rows: 5, cols: 5 },
-            { row: 2, col: 1 }),
+            [2, 1]),
         ).to.be.deep.eq([
             [{ cell: "empty" }, { cell: "empty" }, { cell: "empty" }, { cell: "empty" }, { cell: "empty" }],
             [{ cell: "empty" }, { cell: "empty" }, { cell: "empty" }, { cell: "empty" }, { cell: "empty" }],
