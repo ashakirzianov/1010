@@ -10,6 +10,11 @@ function playArea(store: PlayArea = null as any, action: AnyAction): PlayArea {
                 figureInHand: store.figureInHand === action.payload ?
                     undefined : action.payload,
             };
+        case "TARGET_OVER":
+            return {
+                ...store,
+                placePosition: action.payload,
+            };
         default:
             return store;
     }

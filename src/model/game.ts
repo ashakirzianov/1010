@@ -10,16 +10,17 @@ export type Figure = {
 
 export type EmptyCell = { cell: "empty" };
 export type FullCell = { cell: "full", color: ColorCode };
-export type Cell = EmptyCell | FullCell;
-
-export type Board = {
-    cells: Cell[][],
-};
+export type ConflictCell = { cell: "conflict", top: Cell, bottom: Cell };
+export type Cell = EmptyCell | FullCell | ConflictCell;
 
 export type PlayArea = {
-    board: Board,
+    cells: Cell[][],
     availableFigures: Figure[],
     figureInHand: number | undefined,
+    placePosition?: {
+        row: number,
+        col: number,
+    },
 };
 
 export type GameSettings = {

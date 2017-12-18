@@ -9,10 +9,12 @@ type GameGridProps = {
     cellBorderColor?: ColorCode,
 } & Actions<{
     onClick: null,
+    mouseOverCell: [number, number] | undefined,
 }>;
 function makeGameGridComp(vs: VisualSettings): React.SFC<GameGridProps> {
     const GameGrid: React.SFC<GameGridProps> = props =>
         <Grid
+            mouseOverCell={props.mouseOverCell}
             cellBorderColor={ props.cellBorderColor === undefined ? undefined : cellColor(props.cellBorderColor, vs.palette)}
             onClick={props.onClick}
             rows={mapMtx(props.cells, c => ({ color: cellColor(c, vs.palette)}))}

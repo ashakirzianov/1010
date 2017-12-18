@@ -22,15 +22,22 @@ export function pickRandom<T>(arr: T[]) {
     return arr[randomInt(arr.length)];
 }
 
-export function makeRows(n: number, m: number) {
-    const colors = ["red", "yellow", "green", "blue"];
-    return range(0, n).map(
-        i => range(0, m).map(
-            j => ({ color: pickRandom(colors) })));
+export type Mtx<T> = T[][];
+export type MtxIdx = [number, number];
+export type MtxBorders = {
+    startRow: number,
+    startCol: number,
+    endRow: number,
+    endCol: number,
+};
+
+export function makeMtx<T>(init: T, rows: number, cols: number): T[][] {
+    return range(rows).map(i =>
+        range(cols).map(j => init));
 }
 
-export function mapMtx<T, U>(mtx: T[][], f: (x: T) => U): U[][] {
-    return mtx.map(row => row.map(f));
+export function mapMtx<T, U>(mtx: T[][], f: (x: T, idx: MtxIdx) => U): U[][] {
+    return mtx.map((row, i) => row.map((col, j) => f(col, [i, j])));
 }
 
 function reduceMtxHelper<T, U>(mtx: T[][], f: (acc: U, curr: T, idx: [number, number]) => U, init: U): U {
@@ -55,17 +62,18 @@ export function reduceMtx<T, U>(mtx: T[][], f: (acc: U, curr: T, idx: [number, n
     return reduceMtxHelper(mtx, f, acc);
 }
 
-export type MatrixBorders = {
-    startRow: number,
-    startCol: number,
-    endRow: number,
-    endCol: number,
-};
-export function subMtx(borders: MatrixBorders) {
+export function subMtx(borders: MtxBorders) {
     return function f<T>(mtx: T[][]) {
         return range(borders.startRow, borders.endRow).map(i =>
             range(borders.startCol, borders.endCol).map(j =>
                 mtx[i][j]));
+    };
+}
+
+export function sizeMtx<T>(mtx: T[][]) {
+    return {
+        rows: mtx.length,
+        cols: mtx[0].length,
     };
 }
 
@@ -102,4 +110,16 @@ export function matricify(cols: number) {
 
         return mtx;
     };
+}
+
+export function letExp<T, U>(x: T, f: (x: T) => U) {
+    return f(x);
+}
+
+export function exp<T>(f: () => T): T {
+    return f();
+}
+
+export function itemAtIndex<T>(arr: T[], idx: number | undefined): T | undefined {
+    return idx === undefined ? undefined : arr[idx];
 }

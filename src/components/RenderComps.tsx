@@ -65,6 +65,7 @@ const Grid: SFC<{
     cellBorderColor?: Color,
 } & Actions<{
     onClick: null,
+    mouseOverCell: [number, number] | undefined,
 }>> = props =>
         <table onClick={a => props.onClick && props.onClick(null)} style={{
             borderSpacing: props.margin,
@@ -73,15 +74,20 @@ const Grid: SFC<{
             <tbody>
                 {props.rows.map((row, i) =>
                     <tr key={i}>{row.map((col, j) =>
-                        <td key={j} style={{
-                            background: col.color,
-                            width: props.cellSize,
-                            height: props.cellSize,
-                            borderRadius: props.borderRadius,
-                            borderColor: props.cellBorderColor || col.color,
-                            borderWidth: 3, // TODO: extract as parameter
-                            borderStyle: "solid",
-                        }} />)}
+                        <td
+                            key={j}
+                            onMouseEnter={e => props.mouseOverCell && props.mouseOverCell([i, j])}
+                            onMouseLeave={e => props.mouseOverCell && props.mouseOverCell(undefined)}
+                            style={{
+                                background: col.color,
+                                width: props.cellSize,
+                                height: props.cellSize,
+                                borderRadius: props.borderRadius,
+                                borderColor: props.cellBorderColor || col.color,
+                                borderWidth: 3, // TODO: extract as parameter
+                                borderStyle: "solid",
+                            }}
+                        />)}
                     </tr>)}
             </tbody>
         </table>;
