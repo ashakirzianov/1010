@@ -124,7 +124,7 @@ export function removeFilled(board: Board): Board {
 }
 
 export function isGameOver(layer: Cell[][], hand: Figure[]) {
-    return hand.some(figure =>
+    return !hand.some(figure =>
             someMtx(layer, (cell, idx) =>
                 canPlaceFigure(layer, figure, idx)));
 }

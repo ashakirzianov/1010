@@ -63,7 +63,7 @@ describe("Logic", () => {
         ])).deep.eq([2]);
     });
 
-    it("isGameOver", () => {
+    it("isGameOver true", () => {
         expect(isGameOver([
             [o, o, o, x],
             [o, x, x, x],
@@ -73,8 +73,23 @@ describe("Logic", () => {
             color: 0,
             shape: [
                 [1, 1],
-                [0, 0],
+                [0, 1],
             ],
         }])).eq(true);
+    });
+
+    it("isGameOver false", () => {
+        expect(isGameOver([
+            [o, o, o, x],
+            [o, x, x, x],
+            [o, x, x, o],
+            [o, x, x, o],
+        ], [{
+            color: 0,
+            shape: [
+                [1, 1],
+                [1, 0],
+            ],
+        }])).eq(false);
     });
 });
