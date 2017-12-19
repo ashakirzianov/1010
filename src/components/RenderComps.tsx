@@ -57,13 +57,16 @@ const Stack: LayoutComp = props =>
     </Div>;
 
 export type Color = string;
-export type GridCell = { color: Color };
+export type GridCell = {
+    color: Color,
+    borderColor?: Color,
+};
 const Grid: SFC<{
     rows: GridCell[][],
-    cellSize: number,
+    cellSize: number | string,
     borderRadius?: number,
+    borderWidth?: number,
     margin?: number,
-    cellBorderColor?: Color,
 } & Actions<{
     onClick: MtxIdx,
     mouseOverCell: MtxIdx | undefined,
@@ -74,19 +77,19 @@ const Grid: SFC<{
         }}>
             <tbody>
                 {props.rows.map((row, i) =>
-                    <tr key={i}>{row.map((col, j) =>
+                    <tr key={i}>{row.map((cell, j) =>
                         <td
                             key={j}
                             onMouseEnter={e => props.mouseOverCell && props.mouseOverCell([i, j])}
                             onMouseLeave={e => props.mouseOverCell && props.mouseOverCell(undefined)}
                             onClick={a => props.onClick && props.onClick([i, j])}
                             style={{
-                                background: col.color,
+                                background: cell.color,
                                 width: props.cellSize,
                                 height: props.cellSize,
                                 borderRadius: props.borderRadius,
-                                borderColor: props.cellBorderColor || col.color,
-                                borderWidth: 3, // TODO: extract as parameter
+                                borderColor: cell.borderColor || cell.color,
+                                borderWidth: props.borderWidth,
                                 borderStyle: "solid",
                             }}
                         />)}

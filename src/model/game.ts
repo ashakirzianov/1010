@@ -10,7 +10,7 @@ export type Figure = {
 };
 
 export type EmptyCell = { cell: "empty" };
-export type FullCell = { cell: "full", color: ColorCode };
+export type FullCell = { cell: "full", color: ColorCode, selected?: boolean };
 export type ConflictCell = { cell: "conflict", top: Cell, bottom: Cell };
 export type Cell = EmptyCell | FullCell | ConflictCell;
 

@@ -76,13 +76,6 @@ export function placeFigureOn(layer: Cell[][], figure?: Figure, position?: MtxId
     ));
 }
 
-export function colorFromCell(cell: Cell): ColorCode {
-    return cell.cell === "empty" ? "empty"
-        : cell.cell === "full" ? cell.color
-            : "selected" // TODO: fix
-        ;
-}
-
 export function isFigureOnBoard(figure: Figure, position: MtxIdx, boardSize: MtxSize) {
     return figure.shape.every((row, i) =>
         row.every((cell, j) =>
