@@ -10,11 +10,13 @@ const Div: SFC<{
     display?: DisplayValue,
     align?: AlignValue,
     margin?: number,
+    borderWidth?: number,
 }> = props =>
         <div style={{
             display: props.display || "block",
             textAlign: props.align,
             margin: props.margin || 0,
+            border: props.borderWidth,
         }}>
             {props.children}
         </div>;
@@ -22,7 +24,7 @@ const Div: SFC<{
 const Label: SFC<{
     text: string,
 }> = props =>
-    <h1>{props.text}</h1>;
+        <h1>{props.text}</h1>;
 
 export type LayoutProps = {
     align?: AlignValue,
@@ -102,4 +104,29 @@ const Grid: SFC<{
             </tbody>
         </table>;
 
-export { Div, Label, Line, Stack, Grid };
+const Screen: SFC<{
+    visible?: boolean,
+    background?: Color,
+}> = props =>
+    props.visible ?
+    <div
+        style={{
+            position: "fixed",
+            width: "100%",
+            height: "100%",
+            left: 0,
+            top: 0,
+            background: props.background || "rgba(0, 0, 0, 0)",
+            zIndex: 10,
+        }}
+    >
+        {props.children}
+    </div>
+    : <div/>;
+
+const MessageBox: SFC<{}> = props =>
+        <Div align="center" borderWidth={3}>
+            {props.children}
+        </Div>;
+
+export { Div, Label, Line, Stack, Grid, Screen, MessageBox };

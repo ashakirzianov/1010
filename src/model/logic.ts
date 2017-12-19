@@ -10,8 +10,8 @@ import { ColorCode } from "../visuals";
 export const defaultSettings: GameSettings = {
     figureBank: allFigures,
     boardSize: {
-        rows: 10,
-        cols: 10,
+        rows: 4,
+        cols: 4,
     },
     handSize: 3,
 };
@@ -91,7 +91,7 @@ export function isFigureOnBoard(figure: Figure, position: MtxIdx, boardSize: Mtx
 export function canPlaceFigure(layer: Cell[][], figure?: Figure, position?: MtxIdx) {
     return figure !== undefined && position !== undefined
         && isFigureOnBoard(figure, position, sizeMtx(layer))
-        && !everyMtx(placeFigureOn(layer, figure, position), cell =>
+        && everyMtx(placeFigureOn(layer, figure, position), cell =>
             cell.cell !== "conflict");
 }
 
@@ -123,14 +123,14 @@ export function removeFilled(board: Board): Board {
     };
 }
 
-export function isGameOver(board: Board) {
-    return board.availableFigures.some(figure =>
-            someMtx(board.cells, (cell, idx) =>
-                canPlaceFigure(board.cells, figureInHand(board), idx)));
+export function isGameOver(layer: Cell[][], hand: Figure[]) {
+    return hand.some(figure =>
+            someMtx(layer, (cell, idx) =>
+                canPlaceFigure(layer, figure, idx)));
 }
 
 export function updateGameOver(board: Board): Board {
-    return isGameOver(board)
+    return isGameOver(board.cells, board.availableFigures)
         ? {
             ...board,
             isGameOver: true,
