@@ -24,6 +24,7 @@ function makeGameGridComp(vs: VisualSettings): React.SFC<GameGridProps> {
             cellSize={vs.cellSize}
             margin={vs.cellMargin}
             borderRadius={vs.cornerRadius}
+            borderWidth={vs.selectedWidth}
         />;
 
     return GameGrid;

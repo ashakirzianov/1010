@@ -8,14 +8,9 @@ export type Palette = {
     [k in ColorName]: Color;
 };
 
-export type VisualSettings = {
-    palette: Palette,
-    cellSize: number,
-    cellMargin: number,
-    cornerRadius: number,
-};
+export type VisualSettings = typeof visualSettings;
 
-export const visualSettings: VisualSettings = {
+export const visualSettings = {
     palette: {
         blocks: [
             "#3F2E56", // Big square
@@ -26,13 +21,14 @@ export const visualSettings: VisualSettings = {
             "#ACACDE", // Big plank
             "#ABDAFC", // Small plank
         ],
-        empty: "#BBBBBB",
+        empty: "#EEEEEE",
         none: "rgba(0, 0, 0, 0)",
         selected: "orange",
     },
-    cellSize: 30,
-    cellMargin: 3,
-    cornerRadius: 5,
+    cellSize: 25,
+    cellMargin: 6,
+    cornerRadius: 12,
+    selectedWidth: 8,
 };
 
 export function cellColor(colorCode: ColorCode, palette: Palette) {

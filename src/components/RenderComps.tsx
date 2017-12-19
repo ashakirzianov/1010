@@ -63,8 +63,9 @@ export type GridCell = {
 };
 const Grid: SFC<{
     rows: GridCell[][],
-    cellSize: number,
+    cellSize: number | string,
     borderRadius?: number,
+    borderWidth?: number,
     margin?: number,
 } & Actions<{
     onClick: MtxIdx,
@@ -88,7 +89,7 @@ const Grid: SFC<{
                                 height: props.cellSize,
                                 borderRadius: props.borderRadius,
                                 borderColor: cell.borderColor || cell.color,
-                                borderWidth: 3, // TODO: extract as parameter
+                                borderWidth: props.borderWidth,
                                 borderStyle: "solid",
                             }}
                         />)}
