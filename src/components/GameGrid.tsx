@@ -5,8 +5,12 @@ import { Grid, GridCell } from "./RenderComps";
 import { Actions } from "./comp-utils";
 import { Cell } from "../model/game";
 
+export type GameGridCell = {
+    color: ColorCode,
+    borderColor?: ColorCode,
+};
 type GameGridProps = {
-    cells: Cell[][],
+    cells: GameGridCell[][],
 } & Actions<{
     onClick: [number, number],
     mouseOverCell: [number, number] | undefined,
@@ -25,11 +29,13 @@ function makeGameGridComp(vs: VisualSettings): React.SFC<GameGridProps> {
     return GameGrid;
 }
 
-function makeGridCell(cell: Cell, palette: Palette): GridCell {
-    return cell.cell === "empty" ? { color: palette.empty }
-        : cell.cell === "full" ? { color: cellColor(cell.color, palette) }
-        : { color: palette.none }
-        ;
+function makeGridCell(cell: GameGridCell, palette: Palette): GridCell {
+    return {
+        color: cellColor(cell.color, palette),
+        borderColor: cell.borderColor !== undefined
+            ? cellColor(cell.borderColor, palette)
+            : undefined,
+    };
 }
 
 export const GameGridComp = makeGameGridComp(visualSettings);

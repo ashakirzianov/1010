@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Shape, Figure, Game, Board } from "../model/game";
-import { GameGridComp } from "./GameGrid";
+import { Shape, Figure, Game, Board, Cell } from "../model/game";
+import { GameGridComp, GameGridCell } from "./GameGrid";
 import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx } from "../utils";
 import { Stack, Line } from "./RenderComps";
 import { Actions } from "./comp-utils";
-import { makeFigureLayer, combineLayers, colorFromCell, placeFigureOn } from "../model/logic";
+import { makeFigureLayer, combineLayers, placeFigureOn } from "../model/logic";
 
 type Comp<P, A = {}> = React.SFC<P & Actions<A>>;
 
@@ -13,10 +13,21 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
         // cellBorderColor={props.selected ? "selected" : undefined}
         onClick={props.onClick}
         cells={mapMtx(props.shape, sc => sc === 1
-            ? { cell: "full" as "full", color: props.color }
-            : { cell: "empty" as "empty" }
+            ? { color: props.color, borderColor: props.selected
+                ? "selected" as "selected" : undefined }
+            : { color: "none" as "none" }
         )}
     />;
+
+function transformToGameGrid(cell: Cell): GameGridCell {
+    return cell.cell === "empty" ? { color: "empty" }
+        : cell.cell === "full" ? { color: cell.color }
+        : cell.top.cell === "full" && cell.bottom.cell === "full" ? {
+            color: cell.top.color,
+            borderColor: cell.bottom.color,
+        } : transformToGameGrid(cell.top)
+        ;
+}
 
 const BoardComp: Comp<Board, {
     placeOn: MtxIdx,
@@ -30,10 +41,13 @@ const BoardComp: Comp<Board, {
                     onClick={props.placeOn}
                     cells=
                     {
-                        placeFigureOn(
-                            props.cells,
-                            itemAtIndex(props.availableFigures, props.figureInHand),
-                            props.placePosition,
+                        mapMtx(
+                            placeFigureOn(
+                                props.cells,
+                                itemAtIndex(props.availableFigures, props.figureInHand),
+                                props.placePosition,
+                            ),
+                            transformToGameGrid,
                         )
                     }
                 />
