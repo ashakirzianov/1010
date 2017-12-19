@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { makeFigureLayer, removeFilled, needToRemove, indexesToRemove } from "./logic";
 
-describe("logic", () => {
+describe("Logic", () => {
     const ec = { cell: "empty" as "empty" };
     const zc = { cell: "full" as "full", color: 0 };
     const oc = { cell: "full" as "full", color: 1 };
