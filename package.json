@@ -1,7 +1,7 @@
 {
-  "name": "webapp-template",
+  "name": "1010",
   "version": "1.0.0",
-  "description": "Template for webapp using React & Webpack",
+  "description": "1010 puzzle",
   "main": "index.js",
   "scripts": {
     "local-init": "npm install -g webpack && npm install -g webpack-dev-server",
@@ -14,23 +14,22 @@
     "build": "npm run build:wp",
     "start": "node ./index.js",
     "eb-start": "npm start",
-    "site": "webpack --progress --colors --watch & webpack-dev-server --progress --colors --open"
+    "site": "webpack-dev-server --progress --colors --open --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ashakirzianov/webapp-template.git"
+    "url": "git+https://github.com/ashakirzianov/1010.git"
   },
   "keywords": [
-    "template",
-    "react",
-    "webpack"
+    "1010",
+    "puzzle"
   ],
   "author": "Anton Shakirzianov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ashakirzianov/webapp-template/issues"
+    "url": "https://github.com/ashakirzianov/1010/issues"
   },
-  "homepage": "https://github.com/ashakirzianov/webapp-template#readme",
+  "homepage": "https://github.com/ashakirzianov/1010#readme",
   "dependencies": {
     "@types/chai": "^4.0.6",
     "@types/enzyme": "^3.1.5",
