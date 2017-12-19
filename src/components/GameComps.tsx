@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Shape, Figure, Game, PlayArea } from "../model/game";
+import { Shape, Figure, Game, Board } from "../model/game";
 import { GameGridComp } from "./GameGrid";
 import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx } from "../utils";
 import { Stack, Line } from "./RenderComps";
@@ -15,7 +15,7 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
         cells={mapMtx(props.shape, sc => sc === 1 ? props.color : "none")}
     />;
 
-const PlayAreaComp: Comp<PlayArea, {
+const BoardComp: Comp<Board, {
     placeOn: MtxIdx,
     takeFigure: number,
     targetOver: MtxIdx | undefined,
@@ -54,11 +54,11 @@ const GameComp: Comp<Game, {
     targetOver: MtxIdx | undefined,
     placeOn: MtxIdx,
 }> = props =>
-        <PlayAreaComp
+        <BoardComp
             targetOver={props.targetOver}
             takeFigure={props.takeFigure}
             placeOn={props.placeOn}
-            {...props.playArea}
+            {...props.board}
         />;
 
 export { GameComp };

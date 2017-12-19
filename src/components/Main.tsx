@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PlayArea, Cell, Game } from "../model/game";
+import { Board, Cell, Game } from "../model/game";
 import { GameComp } from "./GameComps";
 import { range, pickRandom } from "../utils";
 import { allFigures } from "../model/figures";

@@ -14,7 +14,7 @@ export type FullCell = { cell: "full", color: ColorCode };
 export type ConflictCell = { cell: "conflict", top: Cell, bottom: Cell };
 export type Cell = EmptyCell | FullCell | ConflictCell;
 
-export type PlayArea = {
+export type Board = {
     cells: Cell[][],
     availableFigures: Figure[],
     figureInHand: number | undefined,
@@ -28,6 +28,6 @@ export type GameSettings = {
 };
 
 export type Game = {
-    playArea: PlayArea,
+    board: Board,
     settings: GameSettings,
 };

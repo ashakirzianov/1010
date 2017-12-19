@@ -1,9 +1,9 @@
 import { combineReducers, AnyAction } from "redux";
 import { Store } from "./store";
-import { PlayArea, GameSettings } from "../model/game";
+import { Board, GameSettings } from "../model/game";
 import { combineLayers, tryPlaceCurrentFigure } from "../model/logic";
 
-function playArea(store: PlayArea = null as any, action: AnyAction): PlayArea {
+function board(store: Board = null as any, action: AnyAction): Board {
     switch (action.type) {
         case "TAKE_FIGURE":
             return {
@@ -28,6 +28,6 @@ function gameSettings(store: GameSettings = null as any, action: AnyAction) {
 }
 
 export const reducer = combineReducers<Store>({
-    playArea: playArea,
+    board: board,
     settings: gameSettings,
 });

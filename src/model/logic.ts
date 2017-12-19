@@ -1,4 +1,4 @@
-import { Game, GameSettings, PlayArea, Cell, Figure } from "./game";
+import { Game, GameSettings, Board, Cell, Figure } from "./game";
 import { allFigures } from "./figures";
 import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, itemAtIndex, MtxSize, everyMtx, Mtx, removeAtIndex } from "../utils";
 import { ColorCode } from "../visuals";
@@ -14,12 +14,12 @@ export const defaultSettings: GameSettings = {
 
 export function createGame(settings: GameSettings = defaultSettings): Game {
     return {
-        playArea: buildPlayArea(settings),
+        board: buildBoard(settings),
         settings: settings,
     };
 }
 
-function buildPlayArea(settings: GameSettings): PlayArea {
+function buildBoard(settings: GameSettings): Board {
     return {
         cells: range(settings.boardSize.rows).map(i =>
             range(settings.boardSize.cols).map<Cell>(j =>
@@ -96,18 +96,18 @@ export function tryPlace(layer: Cell[][], figure?: Figure, position?: MtxIdx) {
         };
 }
 
-export function tryPlaceCurrentFigure(playArea: PlayArea): PlayArea { // TODO: consider refactoring
-    if (playArea.figureInHand === undefined) {
-        return { ...playArea };
+export function tryPlaceCurrentFigure(board: Board): Board { // TODO: consider refactoring
+    if (board.figureInHand === undefined) {
+        return { ...board };
     }
-    const figure = playArea.availableFigures[playArea.figureInHand];
-    const res = tryPlace(playArea.cells, figure, playArea.placePosition);
+    const figure = board.availableFigures[board.figureInHand];
+    const res = tryPlace(board.cells, figure, board.placePosition);
 
     return res.succ ? {
-        ...playArea,
+        ...board,
         cells: res.cells,
-        availableFigures: removeAtIndex(playArea.availableFigures, playArea.figureInHand),
+        availableFigures: removeAtIndex(board.availableFigures, board.figureInHand),
         figureInHand: undefined,
     }
-    : {...playArea };
+    : {...board };
 }
