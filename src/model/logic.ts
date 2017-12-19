@@ -1,6 +1,6 @@
 import { Game, GameSettings, PlayArea, Cell, Figure } from "./game";
 import { allFigures } from "./figures";
-import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, itemAtIndex, MtxSize, everyMtx } from "../utils";
+import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, itemAtIndex, MtxSize, everyMtx, Mtx, removeAtIndex } from "../utils";
 import { ColorCode } from "../visuals";
 
 export const defaultSettings: GameSettings = {
@@ -81,19 +81,33 @@ export function isFigureOnBoard(figure: Figure, position: MtxIdx, boardSize: Mtx
             cell === 0 || (i + position[0] < boardSize.rows && j + position[1] < boardSize.cols)));
 }
 
-export function tryPlaceCurrentFigure(playArea: PlayArea): PlayArea {
-    if (playArea.placePosition === undefined || playArea.figureInHand === undefined) {
-        return playArea;
+export function tryPlace(layer: Cell[][], figure?: Figure, position?: MtxIdx) {
+    if (position === undefined || figure === undefined) {
+        return { succ: false as false };
     }
 
-    const figure = playArea.availableFigures[playArea.figureInHand];
-    const combined = placeFigureOn(
-        playArea.cells,
-        itemAtIndex(playArea.availableFigures, playArea.figureInHand),
-        playArea.placePosition);
+    const placed = placeFigureOn(layer, figure, position);
+    return !isFigureOnBoard(figure, position, sizeMtx(layer))
+        || !everyMtx(placed, cell => cell.cell !== "conflict")
+        ? { succ: false as false }
+        : {
+            succ: true as true,
+            cells: placed,
+        };
+}
 
-    return isFigureOnBoard(figure, playArea.placePosition, sizeMtx(playArea.cells))
-        && everyMtx(combined, cell => cell.cell !== "conflict")
-        ? { ...playArea, cells: combined }
-        : { ...playArea };
+export function tryPlaceCurrentFigure(playArea: PlayArea): PlayArea { // TODO: consider refactoring
+    if (playArea.figureInHand === undefined) {
+        return { ...playArea };
+    }
+    const figure = playArea.availableFigures[playArea.figureInHand];
+    const res = tryPlace(playArea.cells, figure, playArea.placePosition);
+
+    return res.succ ? {
+        ...playArea,
+        cells: res.cells,
+        availableFigures: removeAtIndex(playArea.availableFigures, playArea.figureInHand),
+        figureInHand: undefined,
+    }
+    : {...playArea };
 }

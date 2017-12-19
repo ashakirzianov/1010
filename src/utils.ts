@@ -136,3 +136,7 @@ export function exp<T>(f: () => T): T {
 export function itemAtIndex<T>(arr: T[], idx: number | undefined): T | undefined {
     return idx === undefined ? undefined : arr[idx];
 }
+
+export function removeAtIndex<T>(arr: T[], idx: number): T[] {
+    return arr.slice(0, idx).concat(arr.slice(idx + 1));
+}
