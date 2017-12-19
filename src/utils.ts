@@ -90,9 +90,18 @@ export function sizeMtx<T>(mtx: T[][]): MtxSize {
     };
 }
 
+export function columnsMtx<T>(mtx: Mtx<T>): T[][] {
+    return range(mtx[0].length).map(j =>
+        range(mtx.length).map(i => mtx[i][j]));
+}
+
 export function sameArrays<T>(a1: T[], a2: T[]): boolean {
     return a1.length === a2.length
         && a1.every((x, i) => x === a2[i]);
+}
+
+export function contains<T>(arr: T[], x: T) {
+    return arr.some(e => e === x);
 }
 
 export function distinct<T>(comp: (x: T, y: T) => boolean) {

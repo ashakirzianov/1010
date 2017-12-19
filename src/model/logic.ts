@@ -1,6 +1,6 @@
 import { Game, GameSettings, Board, Cell, Figure } from "./game";
 import { allFigures } from "./figures";
-import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, MtxSize, everyMtx, Mtx, removeAtIndex, letExp } from "../utils";
+import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, MtxSize, everyMtx, Mtx, removeAtIndex, letExp, columnsMtx, contains } from "../utils";
 import { ColorCode } from "../visuals";
 
 export const defaultSettings: GameSettings = {
@@ -110,10 +110,30 @@ export function tryPlaceCurrentFigure(board: Board): Board { // TODO: consider r
 
     return res.succ ? {
         ...board,
-        cells: res.cells,
+        cells: removeFilled(res.cells),
         availableFigures: letExp(removeAtIndex(board.availableFigures, board.figureInHand), af =>
             af.length === 0 ? board.nextHand() : af),
         figureInHand: undefined,
     }
-    : {...board };
+        : { ...board };
+}
+
+export function needToRemove(line: Cell[]) {
+    return line.every(cell => cell.cell === "full");
+}
+
+export function indexesToRemove(lines: Cell[][]) {
+    return lines.reduce((acc, line, i) =>
+        needToRemove(line) ? acc.concat(i) : acc, new Array<number>());
+}
+
+export function removeFilled(layer: Cell[][]) {
+    const rows = indexesToRemove(layer);
+    const cols = indexesToRemove(columnsMtx(layer));
+
+    return mapMtx(layer, (cell, idx) =>
+        contains(rows, idx[0]) || contains(cols, idx[1])
+            ? { cell: "empty" as "empty" }
+            : cell
+    );
 }
