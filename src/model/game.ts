@@ -20,6 +20,7 @@ export type Board = {
     availableFigures: Figure[],
     figureInHand: number | undefined,
     placePosition?: MtxIdx,
+    isGameOver: boolean,
     nextHand: () => Figure[],
 };
 

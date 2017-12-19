@@ -153,3 +153,7 @@ export function removeAtIndex<T>(arr: T[], idx?: number): T[] {
 export function combineF<S, T, U>(f: (x: T) => U, g: (x: S) => T) {
     return (x: S) => f(g(x));
 }
+
+export function combineFs<T>(...fs: Array<(x: T) => T>) {
+    return fs.reduce((acc, f) => combineF(acc, f));
+}

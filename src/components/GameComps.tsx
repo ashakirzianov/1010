@@ -10,7 +10,6 @@ type Comp<P, A = {}> = React.SFC<P & Actions<A>>;
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
     <GameGridComp
-        // cellBorderColor={props.selected ? "selected" : undefined}
         onClick={props.onClick}
         cells={mapMtx(props.shape, sc => sc === 1
             ? {

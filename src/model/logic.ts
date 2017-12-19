@@ -3,7 +3,7 @@ import { allFigures } from "./figures";
 import {
     pickRandom, range, mapMtx, sizeMtx, MtxIdx, MtxSize,
     everyMtx, Mtx, removeAtIndex, letExp, columnsMtx, contains,
-    reduceMtx, combineF,
+    reduceMtx, combineF, combineFs, someMtx,
 } from "../utils";
 import { ColorCode } from "../visuals";
 
@@ -35,6 +35,7 @@ function buildBoard(settings: GameSettings): Board {
         availableFigures: nextHand(),
         figureInHand: undefined,
         placePosition: undefined,
+        isGameOver: false,
         nextHand: nextHand,
     };
 }
@@ -87,25 +88,23 @@ export function isFigureOnBoard(figure: Figure, position: MtxIdx, boardSize: Mtx
             cell === 0 || (i + position[0] < boardSize.rows && j + position[1] < boardSize.cols)));
 }
 
-export function placeCurrentFigure(board: Board): Board {
-    const figure = figureInHand(board);
-    const position = board.placePosition;
-    const placed = placeFigureOn(board.cells, figure, position);
+export function canPlaceFigure(layer: Cell[][], figure?: Figure, position?: MtxIdx) {
+    return figure !== undefined && position !== undefined
+        && isFigureOnBoard(figure, position, sizeMtx(layer))
+        && !everyMtx(placeFigureOn(layer, figure, position), cell =>
+            cell.cell !== "conflict");
+}
 
-    return false
-        || figure === undefined
-        || position === undefined
-        || !isFigureOnBoard(figure, position, sizeMtx(board.cells))
-        || !everyMtx(placed, cell => cell.cell !== "conflict")
-        ? board
-        : {
+export function placeCurrentFigure(board: Board): Board {
+    return canPlaceFigure(board.cells, figureInHand(board), board.placePosition)
+        ? {
             ...board,
-            cells: placed,
-            score: board.score + scoreFigure(figure),
+            cells: placeFigureOn(board.cells, figureInHand(board), board.placePosition),
+            score: board.score + scoreFigure(figureInHand(board)),
             availableFigures: letExp(removeAtIndex(board.availableFigures, board.figureInHand), af =>
                 af.length === 0 ? board.nextHand() : af),
             figureInHand: undefined,
-        };
+        } : { ...board };
 }
 
 export function removeFilled(board: Board): Board {
@@ -124,7 +123,20 @@ export function removeFilled(board: Board): Board {
     };
 }
 
-export const tryPlaceCurrentFigure = combineF(removeFilled, placeCurrentFigure);
+export function isGameOver(board: Board) {
+    return board.availableFigures.some(figure =>
+            someMtx(board.cells, (cell, idx) =>
+                canPlaceFigure(board.cells, figureInHand(board), idx)));
+}
+
+export function updateGameOver(board: Board): Board {
+    return isGameOver(board)
+        ? {
+            ...board,
+            isGameOver: true,
+        }
+        : { ...board };
+}
 
 export function needToRemove(line: Cell[]) {
     return line.every(cell => cell.cell === "full");
@@ -135,6 +147,12 @@ export function indexesToRemove(lines: Cell[][]) {
         needToRemove(line) ? acc.concat(i) : acc, new Array<number>());
 }
 
-export function scoreFigure(figure: Figure) {
-    return reduceMtx(figure.shape, (acc, c) => acc + c, 0);
+export function scoreFigure(figure?: Figure) {
+    return figure ? reduceMtx(figure.shape, (acc, c) => acc + c, 0) : 0;
 }
+
+export const tryPlaceCurrentFigure = combineFs(
+    updateGameOver,
+    removeFilled,
+    placeCurrentFigure,
+);
