@@ -1,6 +1,6 @@
 import { Game, GameSettings, Board, Cell, Figure } from "./game";
 import { allFigures } from "./figures";
-import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, itemAtIndex, MtxSize, everyMtx, Mtx, removeAtIndex } from "../utils";
+import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, MtxSize, everyMtx, Mtx, removeAtIndex, letExp } from "../utils";
 import { ColorCode } from "../visuals";
 
 export const defaultSettings: GameSettings = {
@@ -20,15 +20,23 @@ export function createGame(settings: GameSettings = defaultSettings): Game {
 }
 
 function buildBoard(settings: GameSettings): Board {
+    const nextHand = () => range(settings.handSize)
+        .map(i => pickRandom(settings.figureBank));
+
     return {
         cells: range(settings.boardSize.rows).map(i =>
             range(settings.boardSize.cols).map<Cell>(j =>
                 ({ cell: "empty" }))),
-        availableFigures: range(settings.handSize)
-            .map(i => pickRandom(settings.figureBank)),
+        availableFigures: nextHand(),
         figureInHand: undefined,
         placePosition: undefined,
+        nextHand: nextHand,
     };
+}
+
+export function figureInHand(board: Board) {
+    return board.figureInHand === undefined ? undefined
+        : board.availableFigures[board.figureInHand];
 }
 
 export function makeFigureLayer(
@@ -97,16 +105,14 @@ export function tryPlace(layer: Cell[][], figure?: Figure, position?: MtxIdx) {
 }
 
 export function tryPlaceCurrentFigure(board: Board): Board { // TODO: consider refactoring
-    if (board.figureInHand === undefined) {
-        return { ...board };
-    }
-    const figure = board.availableFigures[board.figureInHand];
+    const figure = figureInHand(board);
     const res = tryPlace(board.cells, figure, board.placePosition);
 
     return res.succ ? {
         ...board,
         cells: res.cells,
-        availableFigures: removeAtIndex(board.availableFigures, board.figureInHand),
+        availableFigures: letExp(removeAtIndex(board.availableFigures, board.figureInHand), af =>
+            af.length === 0 ? board.nextHand() : af),
         figureInHand: undefined,
     }
     : {...board };

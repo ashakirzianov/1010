@@ -19,6 +19,7 @@ export type Board = {
     availableFigures: Figure[],
     figureInHand: number | undefined,
     placePosition?: MtxIdx,
+    nextHand: () => Figure[],
 };
 
 export type GameSettings = {

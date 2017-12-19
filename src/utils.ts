@@ -137,6 +137,6 @@ export function itemAtIndex<T>(arr: T[], idx: number | undefined): T | undefined
     return idx === undefined ? undefined : arr[idx];
 }
 
-export function removeAtIndex<T>(arr: T[], idx: number): T[] {
-    return arr.slice(0, idx).concat(arr.slice(idx + 1));
+export function removeAtIndex<T>(arr: T[], idx?: number): T[] {
+    return idx === undefined ? arr : arr.slice(0, idx).concat(arr.slice(idx + 1));
 }
