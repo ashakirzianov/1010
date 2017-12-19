@@ -1,10 +1,12 @@
 import * as React from "react";
+import { Actions } from "./comp-utils";
+import { MtxIdx } from "../utils";
 
 type SFC<T> = React.SFC<T>;
 
 export type DisplayValue = "block" | "inline" | "inline-block";
 export type AlignValue = "left" | "center" | "right";
-export const Div: SFC<{
+const Div: SFC<{
     display?: DisplayValue,
     align?: AlignValue,
     margin?: number,
@@ -22,12 +24,13 @@ export type LayoutProps = {
     margin?: number,
 };
 export type LayoutComp = SFC<LayoutProps>;
-export const Line: LayoutComp = props =>
+const Line: LayoutComp = props =>
     <Div>
         {
             props.children instanceof Array ?
-                props.children.map(ch =>
+                props.children.map((ch, i) =>
                     <Div
+                        key={i}
                         display="inline-block"
                         align={props.align}
                         margin={props.margin}
@@ -38,47 +41,57 @@ export const Line: LayoutComp = props =>
         }
     </Div>;
 
-// export const Stack: LayoutComp = props =>
-//     <Div
-//         align={props.align}
-//         margin={props.margin}
-//     >
-//         {props.children}
-//     </Div>;
-
-export const Stack: LayoutComp = props =>
+const Stack: LayoutComp = props =>
     <Div>
         {
-            props.children instanceof Array ? props.children.map(ch =>
-            <Div
-                align={props.align}
-                margin={props.margin}
-            >
-                {ch}
-            </Div>)
-            : props.children
+            props.children instanceof Array ? props.children.map((ch, i) =>
+                <Div
+                    key={i}
+                    align={props.align}
+                    margin={props.margin}
+                >
+                    {ch}
+                </Div>)
+                : props.children
         }
     </Div>;
 
 export type Color = string;
 export type GridCell = { color: Color };
-export const Grid: SFC<{
+const Grid: SFC<{
     rows: GridCell[][],
     cellSize: number,
     borderRadius?: number,
     margin?: number,
-}> = props =>
+    cellBorderColor?: Color,
+} & Actions<{
+    onClick: MtxIdx,
+    mouseOverCell: MtxIdx | undefined,
+}>> = props =>
         <table style={{
             borderSpacing: props.margin,
             display: "inline",
         }}>
-            {props.rows.map(row =>
-                <tr>{row.map(col =>
-                    <td style={{
-                        background: col.color,
-                        width: props.cellSize,
-                        height: props.cellSize,
-                        borderRadius: props.borderRadius,
-                    }} />)}
-                </tr>)}
+            <tbody>
+                {props.rows.map((row, i) =>
+                    <tr key={i}>{row.map((col, j) =>
+                        <td
+                            key={j}
+                            onMouseEnter={e => props.mouseOverCell && props.mouseOverCell([i, j])}
+                            onMouseLeave={e => props.mouseOverCell && props.mouseOverCell(undefined)}
+                            onClick={a => props.onClick && props.onClick([i, j])}
+                            style={{
+                                background: col.color,
+                                width: props.cellSize,
+                                height: props.cellSize,
+                                borderRadius: props.borderRadius,
+                                borderColor: props.cellBorderColor || col.color,
+                                borderWidth: 3, // TODO: extract as parameter
+                                borderStyle: "solid",
+                            }}
+                        />)}
+                    </tr>)}
+            </tbody>
         </table>;
+
+export { Div, Line, Stack, Grid };

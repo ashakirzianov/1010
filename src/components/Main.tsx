@@ -1,20 +1,47 @@
 import * as React from "react";
-import { Grid } from "./RenderComps";
-import { PlayArea, Board, Cell } from "../game";
-import { PlayAreaComp } from "./GameComps";
+import { Board, Cell, Game } from "../model/game";
+import { GameComp } from "./GameComps";
 import { range, pickRandom } from "../utils";
-import { allFigures } from "../figures";
+import { allFigures } from "../model/figures";
+import { createGame } from "../model/logic";
+import { Dispatch, connect, InferableComponentEnhancerWithProps, Component } from "react-redux";
+import { Store } from "../redux/store";
+import { AnyAction } from "redux";
+import { takeFigure, targetOver, placeOn } from "../redux/actions";
 
-function makeBoard(): Board {
+const Main: React.SFC<CompProps> = props =>
+    <GameComp
+        placeOn={props.placeOn}
+        targetOver={props.targetOver}
+        takeFigure={props.takeFigure} // TODO: find better solution
+        { ...props.game }
+    />;
+
+function mapStateToProps(store: Store, own: {}) {
     return {
-        cells: range(0, 9).map(i => range(0, 9).map<Cell>(j => ({ cell: "empty" }))),
+        game: store,
     };
 }
 
-const testPlayArea: PlayArea = {
-    board: makeBoard(),
-    availableFigures: range(0, 3).map(i => pickRandom(allFigures)),
-};
+function mapDispatchToProps(dispatch: Dispatch<AnyAction>, own: {}) {
+    function wrap<T, U extends AnyAction>(f: (x: T) => U): (x: T) => void {
+        return x => dispatch(f(x));
+    }
+    return {
+        takeFigure: wrap(takeFigure),
+        targetOver: wrap(targetOver),
+        placeOn: wrap(placeOn),
+    };
+}
 
-export const App: React.SFC<{}> = props =>
-    <PlayAreaComp { ...testPlayArea } />;
+const connector = connect(
+    mapStateToProps,
+    mapDispatchToProps);
+
+function extractResultType<R>(f: InferableComponentEnhancerWithProps<R, any>): R {
+    return undefined as any as R;
+}
+const typeVar = extractResultType(connector);
+type CompProps = typeof typeVar;
+
+export const MainConnected = connector(Main);

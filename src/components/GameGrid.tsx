@@ -1,28 +1,29 @@
 import * as React from "react";
-import { ColorCode } from "../game";
-import { Palette, VisualSettings, visualSettings } from "../visuals";
+import { Palette, VisualSettings, visualSettings, ColorCode, cellColor } from "../visuals";
 import { mapMtx } from "../utils";
 import { Grid } from "./RenderComps";
-
-function cellColor(colorCode: ColorCode, palette: Palette) {
-    return colorCode === "empty" ? palette.empty
-        : colorCode === "none" ? palette.none
-        : palette.blocks[colorCode];
-}
+import { Actions } from "./comp-utils";
 
 type GameGridProps = {
     cells: ColorCode[][],
-};
+    cellBorderColor?: ColorCode,
+} & Actions<{
+    onClick: [number, number],
+    mouseOverCell: [number, number] | undefined,
+}>;
 function makeGameGridComp(vs: VisualSettings): React.SFC<GameGridProps> {
-    const TheGameGridComp: React.SFC<GameGridProps> = props =>
+    const GameGrid: React.SFC<GameGridProps> = props =>
         <Grid
+            mouseOverCell={props.mouseOverCell}
+            cellBorderColor={ props.cellBorderColor === undefined ? undefined : cellColor(props.cellBorderColor, vs.palette)}
+            onClick={props.onClick}
             rows={mapMtx(props.cells, c => ({ color: cellColor(c, vs.palette)}))}
             cellSize={vs.cellSize}
             margin={vs.cellMargin}
             borderRadius={vs.cornerRadius}
         />;
 
-    return TheGameGridComp;
+    return GameGrid;
 }
 
-export const GameGrid = makeGameGridComp(visualSettings);
+export const GameGridComp = makeGameGridComp(visualSettings);

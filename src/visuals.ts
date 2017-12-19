@@ -1,9 +1,11 @@
 export type Color = string;
+export type ColorName = "empty" | "none" | "selected";
+export type ColorCode = number | ColorName;
 
 export type Palette = {
     blocks: Color[],
-    empty: Color,
-    none: Color,
+} & {
+    [k in ColorName]: Color;
 };
 
 export type VisualSettings = {
@@ -25,9 +27,15 @@ export const visualSettings: VisualSettings = {
             "#ABDAFC", // Small plank
         ],
         empty: "#BBBBBB",
-        none: "rgba(0, 0, 0, 0)", // TODO: get correct color
+        none: "rgba(0, 0, 0, 0)",
+        selected: "orange",
     },
     cellSize: 30,
     cellMargin: 3,
-    cornerRadius: 3,
+    cornerRadius: 5,
 };
+
+export function cellColor(colorCode: ColorCode, palette: Palette) {
+    return typeof colorCode === "number" ?
+        palette.blocks[colorCode] : palette[colorCode];
+}
