@@ -19,6 +19,11 @@ const Div: SFC<{
             {props.children}
         </div>;
 
+const Label: SFC<{
+    text: string,
+}> = props =>
+    <h1>{props.text}</h1>;
+
 export type LayoutProps = {
     align?: AlignValue,
     margin?: number,
@@ -97,4 +102,4 @@ const Grid: SFC<{
             </tbody>
         </table>;
 
-export { Div, Line, Stack, Grid };
+export { Div, Label, Line, Stack, Grid };

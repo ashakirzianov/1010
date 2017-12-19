@@ -15,6 +15,7 @@ export type ConflictCell = { cell: "conflict", top: Cell, bottom: Cell };
 export type Cell = EmptyCell | FullCell | ConflictCell;
 
 export type Board = {
+    score: number,
     cells: Cell[][],
     availableFigures: Figure[],
     figureInHand: number | undefined,

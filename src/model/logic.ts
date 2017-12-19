@@ -1,6 +1,10 @@
 import { Game, GameSettings, Board, Cell, Figure } from "./game";
 import { allFigures } from "./figures";
-import { pickRandom, range, mapMtx, sizeMtx, MtxIdx, MtxSize, everyMtx, Mtx, removeAtIndex, letExp, columnsMtx, contains } from "../utils";
+import {
+    pickRandom, range, mapMtx, sizeMtx, MtxIdx, MtxSize,
+    everyMtx, Mtx, removeAtIndex, letExp, columnsMtx, contains,
+    reduceMtx, combineF,
+} from "../utils";
 import { ColorCode } from "../visuals";
 
 export const defaultSettings: GameSettings = {
@@ -24,6 +28,7 @@ function buildBoard(settings: GameSettings): Board {
         .map(i => pickRandom(settings.figureBank));
 
     return {
+        score: 0,
         cells: range(settings.boardSize.rows).map(i =>
             range(settings.boardSize.cols).map<Cell>(j =>
                 ({ cell: "empty" }))),
@@ -82,34 +87,44 @@ export function isFigureOnBoard(figure: Figure, position: MtxIdx, boardSize: Mtx
             cell === 0 || (i + position[0] < boardSize.rows && j + position[1] < boardSize.cols)));
 }
 
-export function tryPlace(layer: Cell[][], figure?: Figure, position?: MtxIdx) {
-    if (position === undefined || figure === undefined) {
-        return { succ: false as false };
-    }
+export function placeCurrentFigure(board: Board): Board {
+    const figure = figureInHand(board);
+    const position = board.placePosition;
+    const placed = placeFigureOn(board.cells, figure, position);
 
-    const placed = placeFigureOn(layer, figure, position);
-    return !isFigureOnBoard(figure, position, sizeMtx(layer))
+    return false
+        || figure === undefined
+        || position === undefined
+        || !isFigureOnBoard(figure, position, sizeMtx(board.cells))
         || !everyMtx(placed, cell => cell.cell !== "conflict")
-        ? { succ: false as false }
+        ? board
         : {
-            succ: true as true,
+            ...board,
             cells: placed,
+            score: board.score + scoreFigure(figure),
+            availableFigures: letExp(removeAtIndex(board.availableFigures, board.figureInHand), af =>
+                af.length === 0 ? board.nextHand() : af),
+            figureInHand: undefined,
         };
 }
 
-export function tryPlaceCurrentFigure(board: Board): Board { // TODO: consider refactoring
-    const figure = figureInHand(board);
-    const res = tryPlace(board.cells, figure, board.placePosition);
+export function removeFilled(board: Board): Board {
+    const rows = indexesToRemove(board.cells);
+    const cols = indexesToRemove(columnsMtx(board.cells));
 
-    return res.succ ? {
+    return {
         ...board,
-        cells: removeFilled(res.cells),
-        availableFigures: letExp(removeAtIndex(board.availableFigures, board.figureInHand), af =>
-            af.length === 0 ? board.nextHand() : af),
-        figureInHand: undefined,
-    }
-        : { ...board };
+        cells: mapMtx(board.cells, (cell, idx) =>
+            contains(rows, idx[0]) || contains(cols, idx[1])
+                ? { cell: "empty" as "empty" }
+                : cell
+        ),
+        score: board.score
+            + (rows.length + cols.length + Math.min(rows.length, cols.length)) * 10,
+    };
 }
+
+export const tryPlaceCurrentFigure = combineF(removeFilled, placeCurrentFigure);
 
 export function needToRemove(line: Cell[]) {
     return line.every(cell => cell.cell === "full");
@@ -120,13 +135,6 @@ export function indexesToRemove(lines: Cell[][]) {
         needToRemove(line) ? acc.concat(i) : acc, new Array<number>());
 }
 
-export function removeFilled(layer: Cell[][]) {
-    const rows = indexesToRemove(layer);
-    const cols = indexesToRemove(columnsMtx(layer));
-
-    return mapMtx(layer, (cell, idx) =>
-        contains(rows, idx[0]) || contains(cols, idx[1])
-            ? { cell: "empty" as "empty" }
-            : cell
-    );
+export function scoreFigure(figure: Figure) {
+    return reduceMtx(figure.shape, (acc, c) => acc + c, 0);
 }

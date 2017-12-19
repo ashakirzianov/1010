@@ -149,3 +149,7 @@ export function itemAtIndex<T>(arr: T[], idx: number | undefined): T | undefined
 export function removeAtIndex<T>(arr: T[], idx?: number): T[] {
     return idx === undefined ? arr : arr.slice(0, idx).concat(arr.slice(idx + 1));
 }
+
+export function combineF<S, T, U>(f: (x: T) => U, g: (x: S) => T) {
+    return (x: S) => f(g(x));
+}
