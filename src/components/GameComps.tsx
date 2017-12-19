@@ -10,9 +10,12 @@ type Comp<P, A = {}> = React.SFC<P & Actions<A>>;
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
     <GameGridComp
-        cellBorderColor={props.selected ? "selected" : undefined}
+        // cellBorderColor={props.selected ? "selected" : undefined}
         onClick={props.onClick}
-        cells={mapMtx(props.shape, sc => sc === 1 ? props.color : "none")}
+        cells={mapMtx(props.shape, sc => sc === 1
+            ? { cell: "full" as "full", color: props.color }
+            : { cell: "empty" as "empty" }
+        )}
     />;
 
 const BoardComp: Comp<Board, {
@@ -25,14 +28,13 @@ const BoardComp: Comp<Board, {
                 <GameGridComp
                     mouseOverCell={props.targetOver}
                     onClick={props.placeOn}
-                    cells={
-                        mapMtx(
-                            placeFigureOn(
-                                props.cells,
-                                itemAtIndex(props.availableFigures, props.figureInHand),
-                                props.placePosition
-                            ),
-                            colorFromCell)
+                    cells=
+                    {
+                        placeFigureOn(
+                            props.cells,
+                            itemAtIndex(props.availableFigures, props.figureInHand),
+                            props.placePosition,
+                        )
                     }
                 />
             </Line>
