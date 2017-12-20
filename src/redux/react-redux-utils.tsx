@@ -9,7 +9,7 @@ export type TopComponent<Store, Actions> = React.SFC<{
     actions: ActionDispatchers<Actions>,
 }>;
 
-export function buildConnectedComp<Store, Actions>(
+export function connectTopLevel<Store, Actions>(
     Comp: TopComponent<Store, Actions>,
     actionCreators: ActionCreators<Actions>,
 ) {
