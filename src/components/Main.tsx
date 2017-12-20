@@ -1,20 +1,17 @@
 import * as React from "react";
 import { Board, Cell, Game } from "../model/game";
 import { GameComp } from "./GameComps";
-import { range, pickRandom } from "../utils";
+import { range, pickRandom, mapObject } from "../utils";
 import { allFigures } from "../model/figures";
 import { createGame } from "../model/logic";
 import { Dispatch, connect, InferableComponentEnhancerWithProps, Component } from "react-redux";
 import { Store } from "../redux/store";
 import { AnyAction } from "redux";
-import { takeFigure, targetOver, placeOn, newGame } from "../redux/actions";
+import { allActionCreators, ActionCreators, ActionDispatchers } from "../redux/actions";
 
 const Main: React.SFC<CompProps> = props =>
     <GameComp
-        placeOn={props.placeOn}
-        targetOver={props.targetOver}
-        takeFigure={props.takeFigure} // TODO: find better solution
-        newGame={props.newGame}
+        { ...props.actions }
         { ...props.game }
     />;
 
@@ -25,14 +22,12 @@ function mapStateToProps(store: Store, own: {}) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>, own: {}) {
-    function wrap<T, U extends AnyAction>(f: (x: T) => U): (x: T) => void {
-        return x => dispatch(f(x));
+    function wrapActions<T>(actions: ActionCreators<T>): ActionDispatchers<T> {
+        return mapObject(actions, (key, value) => (x: any) => dispatch(value(x)));
     }
+
     return {
-        takeFigure: wrap(takeFigure),
-        targetOver: wrap(targetOver),
-        placeOn: wrap(placeOn),
-        newGame: wrap(newGame),
+        actions: wrapActions(allActionCreators),
     };
 }
 

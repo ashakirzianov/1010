@@ -5,20 +5,20 @@ import { combineLayers, tryPlaceCurrentFigure } from "../model/logic";
 
 function board(store: Board = null as any, action: AnyAction): Board {
     switch (action.type) {
-        case "TAKE_FIGURE":
+        case "takeFigure":
             return {
                 ...store,
                 figureInHand: store.figureInHand === action.payload ?
                     undefined : action.payload,
             };
-        case "TARGET_OVER":
+        case "targetOver":
             return {
                 ...store,
                 placePosition: action.payload,
             };
-        case "PLACE_ON":
+        case "placeOn":
             return tryPlaceCurrentFigure(store);
-        case "NEW_GAME":
+        case "newGame":
             return {
                 ...store.nextGame(),
             };

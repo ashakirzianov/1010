@@ -167,3 +167,15 @@ export function combineF<S, T, U>(f: (x: T) => U, g: (x: S) => T) {
 export function combineFs<T>(...fs: Array<(x: T) => T>) {
     return fs.reduce((acc, f) => combineF(acc, f));
 }
+
+export function keys<T>(obj: T): Array<keyof T> {
+    return Object.keys(obj) as any;
+}
+
+export function mapObject<T, U>(
+    obj: T,
+    f: <K extends keyof T, V extends T[K]>(k: K, v: V) => U,
+): { [k in keyof T]: U } {
+    return keys(obj).reduce((acc, key) =>
+        ({ ...acc, [key]: f(key, obj[key]) }), {} as any);
+}
