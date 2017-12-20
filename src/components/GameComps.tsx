@@ -88,8 +88,8 @@ function transformToGameGrid(cell: Cell): GameGridCell {
     return cell.cell === "empty" ? { color: "empty" }
         : cell.cell === "full" ? { color: cell.color }
             : cell.top.cell === "full" && cell.bottom.cell === "full" ? {
-                color: cell.top.color,
-                borderColor: cell.bottom.color,
+                color: cell.bottom.color,
+                borderColor: cell.top.color,
             } : transformToGameGrid(cell.top)
         ;
 }
