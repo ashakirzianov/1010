@@ -2,9 +2,12 @@ import * as React from "react";
 import { Actions } from "./comp-utils";
 import { MtxIdx } from "../utils";
 
-type SFC<T> = React.SFC<T>;
+type SFC<T = {}> = React.SFC<T>;
 
 export type Size = number | string;
+export type FontWeight =
+    | "normal" | "bold" | "bolder" | "lighter"
+    | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 export type DisplayValue = "block" | "inline" | "inline-block";
 export type AlignValue = "left" | "center" | "right";
 const Div: SFC<{
@@ -20,18 +23,23 @@ const Div: SFC<{
             {props.children}
         </div>;
 
-const Label: SFC<{
+const GenericText: SFC<{
+    size: Size,
+    weight?: FontWeight,
+    color?: Color,
 }> = props =>
         <div
             style={{
                 fontFamily: "Open Sans",
-                fontSize: "2em",
-                fontWeight: 400,
-                color: "#4286f4",
+                fontSize: props.size,
+                fontWeight: props.weight,
+                color: props.color,
             }}
         >
             {props.children}
         </div>;
+
+const BigText: SFC = props => <GenericText size="2em" weight={400} color="#4286f4" { ...props } />
 
 export type LayoutProps = {
     align?: AlignValue,
@@ -155,4 +163,4 @@ const MessageBox: SFC<{
         {props.children}
     </div>;
 
-export { Div, Label, Line, Stack, Grid, Screen, MessageBox };
+export { Div, BigText, Line, Stack, Grid, Screen, MessageBox };

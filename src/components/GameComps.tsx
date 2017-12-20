@@ -2,7 +2,7 @@ import * as React from "react";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { GameGridComp, GameGridCell } from "./GameGrid";
 import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx } from "../utils";
-import { Stack, Line, Div, Label, Screen, MessageBox } from "./RenderComps";
+import { Stack, Line, Div, BigText, Screen, MessageBox } from "./RenderComps";
 import { Actions } from "./comp-utils";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 
@@ -22,7 +22,7 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
 
 const ScoreComp: Comp<{ score: number }> = props =>
         <Line>
-            <Label>{ props.score.toString() }</Label>
+            <BigText>{ props.score.toString() }</BigText>
         </Line>;
 
 const CellsComp: typeof BoardComp = props =>
@@ -52,7 +52,7 @@ const GameOverComp: Comp<{
 }> = props =>
     <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
         <MessageBox>
-            <Label>Game over!</Label>
+            <BigText>Game over!</BigText>
         </MessageBox>
     </Screen>;
 
