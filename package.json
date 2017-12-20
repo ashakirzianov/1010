@@ -14,7 +14,7 @@
     "build": "npm run build:wp",
     "start": "node ./index.js",
     "eb-start": "npm start",
-    "site": "webpack-dev-server --progress --colors --open --watch"
+    "site": "webpack --p --progress & webpack-dev-server --progress --colors --open --watch"
   },
   "repository": {
     "type": "git",
