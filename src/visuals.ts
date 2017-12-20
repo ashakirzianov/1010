@@ -25,10 +25,10 @@ export const visualSettings = {
         none: "rgba(0, 0, 0, 0)",
         selected: "orange",
     },
-    cellSize: 25,
-    cellMargin: 6,
-    cornerRadius: 12,
-    selectedWidth: 8,
+    cellSize: "2em",
+    cellMargin: "0.5em",
+    cornerRadius: "0.8em",
+    selectedWidth: "0.2em",
 };
 
 export function cellColor(colorCode: ColorCode, palette: Palette) {

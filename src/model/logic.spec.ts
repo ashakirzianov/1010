@@ -1,10 +1,18 @@
 import { expect } from "chai";
-import { makeFigureLayer, removeFilled, needToRemove, indexesToRemove } from "./logic";
+import { makeFigureLayer, removeFilled, needToRemove, indexesToRemove, isGameOver } from "./logic";
+import { Cell, Board } from "./game";
 
 describe("Logic", () => {
     const o = { cell: "empty" as "empty" };
     const x = { cell: "full" as "full", color: 0 };
     const y = { cell: "full" as "full", color: 1 };
+
+    function board(cells: Cell[][]): Board {
+        return {
+            cells: cells,
+        } as any as Board;
+    }
+
     it("makeFigureLayer", () => {
         expect(makeFigureLayer({
             color: 0,
@@ -25,13 +33,13 @@ describe("Logic", () => {
     });
 
     it("removeFilled", () => {
-        expect(removeFilled([
+        expect(removeFilled(board([
             [o, x, x, o, o],
             [o, x, x, o, o],
             [y, x, y, x, x],
             [o, x, x, y, y],
             [o, x, x, o, o],
-        ])).to.be.deep.eq([
+        ])).cells).to.be.deep.eq([
             [o, o, o, o, o],
             [o, o, o, o, o],
             [o, o, o, o, o],
@@ -53,5 +61,35 @@ describe("Logic", () => {
             [o, x, x, y, y],
             [o, x, x, o, o],
         ])).deep.eq([2]);
+    });
+
+    it("isGameOver true", () => {
+        expect(isGameOver([
+            [o, o, o, x],
+            [o, x, x, x],
+            [o, x, x, o],
+            [o, x, x, o],
+        ], [{
+            color: 0,
+            shape: [
+                [1, 1],
+                [0, 1],
+            ],
+        }])).eq(true);
+    });
+
+    it("isGameOver false", () => {
+        expect(isGameOver([
+            [o, o, o, x],
+            [o, x, x, x],
+            [o, x, x, o],
+            [o, x, x, o],
+        ], [{
+            color: 0,
+            shape: [
+                [1, 1],
+                [1, 0],
+            ],
+        }])).eq(false);
     });
 });
