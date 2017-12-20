@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { GameGridComp, GameGridCell } from "./GameGrid";
-import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx } from "../utils";
+import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx, KeyRestriction } from "../utils";
 import { Stack, Line, Div, BigText, Screen, MessageBox, BigButton } from "./RenderComps";
 import { Actions } from "./comp-utils";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 
-type Comp<P, A = {}> = React.SFC<P & Actions<A>>;
+type Comp<P extends KeyRestriction<P, A>, A = {}> = React.SFC<P & Actions<A>>;
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
     <GameGridComp
