@@ -48,11 +48,11 @@ const HandComp: typeof BoardComp = props =>
     </Line>;
 
 const NewGameComp: Comp<{}, {
-    onClick: null,
+    onClick: {},
 }> = props =>
     <BigButton onClick={x =>{
         console.debug("hello");
-        props.onClick && props.onClick(null);
+        props.onClick && props.onClick({});
     }}>
         New game
     </BigButton>;
@@ -67,10 +67,10 @@ const GameOverComp: Comp<{
     </Screen>;
 
 type BoardActions = {
-    placeOn: MtxIdx,
-    takeFigure: number,
+    takeFigure: number | undefined,
     targetOver: MtxIdx | undefined,
-    newGame: any,
+    placeOn: {},
+    newGame: {},
 };
 const BoardComp: Comp<Board, BoardActions> = props =>
         <Stack align="center" margin={10}>
@@ -81,13 +81,13 @@ const BoardComp: Comp<Board, BoardActions> = props =>
             <NewGameComp onClick={props.newGame} />
         </Stack>;
 
-const GameComp: Comp<Game, BoardActions> = props =>
+const GameComp: React.SFC<{
+    store: Game,
+    actions: Actions<BoardActions>,
+}> = props =>
         <BoardComp
-            targetOver={props.targetOver}
-            takeFigure={props.takeFigure}
-            placeOn={props.placeOn}
-            newGame={props.newGame}
-            {...props.board}
+            { ...props.actions }
+            {...props.store.board }
         />;
 
 export { GameComp };
