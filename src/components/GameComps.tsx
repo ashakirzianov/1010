@@ -22,7 +22,7 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
 
 const ScoreComp: Comp<{ score: number }> = props =>
         <Line>
-            <Label text={ props.score.toString() } />
+            <Label>{ props.score.toString() }</Label>
         </Line>;
 
 const CellsComp: typeof BoardComp = props =>
@@ -51,7 +51,9 @@ const GameOverComp: Comp<{
     over: boolean,
 }> = props =>
     <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
-        <MessageBox>Game over!</MessageBox>
+        <MessageBox>
+            <Label>Game over!</Label>
+        </MessageBox>
     </Screen>;
 
 const BoardComp: Comp<Board, {

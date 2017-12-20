@@ -4,31 +4,38 @@ import { MtxIdx } from "../utils";
 
 type SFC<T> = React.SFC<T>;
 
+export type Size = number | string;
 export type DisplayValue = "block" | "inline" | "inline-block";
 export type AlignValue = "left" | "center" | "right";
 const Div: SFC<{
     display?: DisplayValue,
     align?: AlignValue,
-    margin?: number,
-    borderWidth?: number,
+    margin?: Size,
 }> = props =>
         <div style={{
             display: props.display || "block",
             textAlign: props.align,
             margin: props.margin || 0,
-            border: props.borderWidth,
         }}>
             {props.children}
         </div>;
 
 const Label: SFC<{
-    text: string,
 }> = props =>
-        <h1>{props.text}</h1>;
+        <div
+            style={{
+                fontFamily: "Open Sans",
+                fontSize: "2em",
+                fontWeight: 400,
+                color: "#4286f4",
+            }}
+        >
+            {props.children}
+        </div>;
 
 export type LayoutProps = {
     align?: AlignValue,
-    margin?: number,
+    margin?: Size,
 };
 export type LayoutComp = SFC<LayoutProps>;
 const Line: LayoutComp = props =>
@@ -70,10 +77,10 @@ export type GridCell = {
 };
 const Grid: SFC<{
     rows: GridCell[][],
-    cellSize: number | string,
-    borderRadius?: number,
-    borderWidth?: number,
-    margin?: number,
+    cellSize: Size,
+    borderRadius?: Size,
+    borderWidth?: Size,
+    margin?: Size,
 } & Actions<{
     onClick: MtxIdx,
     mouseOverCell: MtxIdx | undefined,
@@ -108,25 +115,44 @@ const Screen: SFC<{
     visible?: boolean,
     background?: Color,
 }> = props =>
-    props.visible ?
-    <div
-        style={{
-            position: "fixed",
-            width: "100%",
-            height: "100%",
-            left: 0,
-            top: 0,
-            background: props.background || "rgba(0, 0, 0, 0)",
-            zIndex: 10,
-        }}
-    >
-        {props.children}
-    </div>
-    : <div/>;
+        props.visible ?
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    position: "fixed",
+                    width: "100%",
+                    height: "100%",
+                    left: 0,
+                    top: 0,
+                    background: props.background || "rgba(0, 0, 0, 0)",
+                    zIndex: 10,
+                }}
+            >
+                {props.children}
+            </div>
+            : <div style={{ display: "none" }} />;
 
-const MessageBox: SFC<{}> = props =>
-        <Div align="center" borderWidth={3}>
-            {props.children}
-        </Div>;
+const MessageBox: SFC<{
+    top?: Size,
+    background?: Color,
+    borderWidth?: Size,
+    padding?: Size,
+    marginTop?: Size,
+}> = props =>
+    <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderStyle: "solid",
+        borderWidth: props.borderWidth || "2px",
+        marginTop: props.marginTop || "-20%",
+        padding: props.padding || "10%",
+        background: props.background || "rgba(250, 250, 250, 0.8)",
+    }}>
+        {props.children}
+    </div>;
 
 export { Div, Label, Line, Stack, Grid, Screen, MessageBox };
