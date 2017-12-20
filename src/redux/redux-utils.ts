@@ -1,13 +1,5 @@
 import { mapObject } from "../utils";
 
-export function def<T>() {
-    return null as any as T;
-}
-
-export function defOpt<T>() {
-    return def<T | undefined>();
-}
-
 export type Opt<T> = T | undefined;
 export type ActionType<Type extends string, Payload> = {
     type: Type,

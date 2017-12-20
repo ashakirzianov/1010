@@ -179,3 +179,11 @@ export function mapObject<T, U>(
     return keys(obj).reduce((acc, key) =>
         ({ ...acc, [key]: f(key, obj[key]) }), {} as any);
 }
+
+export function def<T>() {
+    return null as any as T;
+}
+
+export function defOpt<T>() {
+    return def<T | undefined>();
+}
