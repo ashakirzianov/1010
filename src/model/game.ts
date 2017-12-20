@@ -22,6 +22,7 @@ export type Board = {
     placePosition?: MtxIdx,
     isGameOver: boolean,
     nextHand: () => Figure[],
+    nextGame: () => Board,
 };
 
 export type GameSettings = {

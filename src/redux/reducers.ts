@@ -18,6 +18,10 @@ function board(store: Board = null as any, action: AnyAction): Board {
             };
         case "PLACE_ON":
             return tryPlaceCurrentFigure(store);
+        case "NEW_GAME":
+            return {
+                ...store.nextGame(),
+            };
         default:
             return store;
     }

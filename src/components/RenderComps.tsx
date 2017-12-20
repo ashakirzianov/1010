@@ -41,6 +41,19 @@ const GenericText: SFC<{
 
 const BigText: SFC = props => <GenericText size="2em" weight={400} color="#4286f4" { ...props } />
 
+function makeButton<T>(Comp: SFC<T>) {
+    const Button: SFC<{
+        onClick?: (x: any) => void;
+    }> = props =>
+        <div onClick={() => props.onClick && props.onClick(null)}>
+            <Comp>{props.children}</Comp>
+        </div>;
+    
+    return Button;
+}
+
+const BigButton = makeButton(BigText);
+
 export type LayoutProps = {
     align?: AlignValue,
     margin?: Size,
@@ -163,4 +176,10 @@ const MessageBox: SFC<{
         {props.children}
     </div>;
 
-export { Div, BigText, Line, Stack, Grid, Screen, MessageBox };
+export {
+    Div,
+    BigText, BigButton,
+    Line, Stack,
+    Grid,
+    Screen, MessageBox,
+};

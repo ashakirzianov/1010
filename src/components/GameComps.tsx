@@ -2,7 +2,7 @@ import * as React from "react";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { GameGridComp, GameGridCell } from "./GameGrid";
 import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx } from "../utils";
-import { Stack, Line, Div, BigText, Screen, MessageBox } from "./RenderComps";
+import { Stack, Line, Div, BigText, Screen, MessageBox, BigButton } from "./RenderComps";
 import { Actions } from "./comp-utils";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 
@@ -47,6 +47,16 @@ const HandComp: typeof BoardComp = props =>
         }
     </Line>;
 
+const NewGameComp: Comp<{}, {
+    onClick: null,
+}> = props =>
+    <BigButton onClick={x =>{
+        console.debug("hello");
+        props.onClick && props.onClick(null);
+    }}>
+        New game
+    </BigButton>;
+
 const GameOverComp: Comp<{
     over: boolean,
 }> = props =>
@@ -56,27 +66,27 @@ const GameOverComp: Comp<{
         </MessageBox>
     </Screen>;
 
-const BoardComp: Comp<Board, {
+type BoardActions = {
     placeOn: MtxIdx,
     takeFigure: number,
     targetOver: MtxIdx | undefined,
-}> = props =>
+    newGame: any,
+};
+const BoardComp: Comp<Board, BoardActions> = props =>
         <Stack align="center" margin={10}>
             <GameOverComp over={props.isGameOver} />
             <ScoreComp score={props.score} />
             <CellsComp { ...props } />
             <HandComp { ...props } />
+            <NewGameComp onClick={props.newGame} />
         </Stack>;
 
-const GameComp: Comp<Game, {
-    takeFigure: number,
-    targetOver: MtxIdx | undefined,
-    placeOn: MtxIdx,
-}> = props =>
+const GameComp: Comp<Game, BoardActions> = props =>
         <BoardComp
             targetOver={props.targetOver}
             takeFigure={props.takeFigure}
             placeOn={props.placeOn}
+            newGame={props.newGame}
             {...props.board}
         />;
 
