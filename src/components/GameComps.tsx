@@ -3,10 +3,10 @@ import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { GameGridComp, GameGridCell } from "./GameGrid";
 import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx, KeyRestriction } from "../utils";
 import { Stack, Line, Div, BigText, Screen, MessageBox, BigButton } from "./RenderComps";
-import { Actions } from "./comp-utils";
+import { Callbacks } from "./comp-utils";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 
-type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & Actions<A>>;
+type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & Callbacks<A>>;
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
     <GameGridComp
@@ -83,7 +83,7 @@ const BoardComp: Comp<Board, BoardActions> = props =>
 
 const GameComp: React.SFC<{
     store: Game,
-    actions: Actions<BoardActions>,
+    actions: Callbacks<BoardActions>,
 }> = props =>
         <BoardComp
             { ...props.actions }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ActionsOpt } from "./comp-utils";
+import { CallbacksOpt } from "./comp-utils";
 import { MtxIdx } from "../utils";
 
 type SFC<T = {}> = React.SFC<T>;
@@ -102,7 +102,7 @@ const Grid: SFC<{
     borderRadius?: Size,
     borderWidth?: Size,
     margin?: Size,
-} & ActionsOpt<{
+} & CallbacksOpt<{
     onClick: MtxIdx,
     mouseOverCell: MtxIdx | undefined,
 }>> = props =>

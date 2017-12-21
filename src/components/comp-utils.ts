@@ -1,5 +1,5 @@
-export type Actions<A> = {
+export type Callbacks<A> = {
     [name in keyof A]: ((arg: A[name]) => void);
 };
 
-export type ActionsOpt<A> = Partial<Actions<A>>;
+export type CallbacksOpt<A> = Partial<Callbacks<A>>;
