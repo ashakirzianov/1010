@@ -5,6 +5,7 @@ import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx, KeyRestriction } from "..
 import { Stack, Line, Div, BigText, Screen, MessageBox, BigButton } from "./RenderComps";
 import { Callbacks } from "./comp-utils";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
+import { ActionsTemplate } from "../model/actions";
 
 type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & Callbacks<A>>;
 
@@ -63,12 +64,7 @@ const GameOverComp: Comp<{
         </MessageBox>
     </Screen>;
 
-type BoardActions = {
-    takeFigure: number | undefined,
-    targetOver: MtxIdx | undefined,
-    placeOn: {},
-    newGame: {},
-};
+type BoardActions = ActionsTemplate;
 const BoardComp: Comp<Board, BoardActions> = props =>
         <Stack align="center" margin={10}>
             <GameOverComp over={props.isGameOver} />
