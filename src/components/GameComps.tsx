@@ -22,9 +22,9 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
     />;
 
 const ScoreComp: Comp<{ score: number }> = props =>
-        <Line>
-            <BigText>{ props.score.toString() }</BigText>
-        </Line>;
+    <Line>
+        <BigText>{props.score.toString()}</BigText>
+    </Line>;
 
 const CellsComp: typeof BoardComp = props =>
     <Line>
@@ -49,30 +49,41 @@ const HandComp: typeof BoardComp = props =>
     </Line>;
 
 const NewGameComp: Comp<{}, {
-    onClick: {},
+    newGame: {},
 }> = props =>
-    <BigButton onClick={props.onClick}>
-        New game
+        <BigButton onClick={props.newGame}>
+            New game
     </BigButton>;
 
 const GameOverComp: Comp<{
     over: boolean,
-}> = props =>
-    <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
-        <MessageBox>
-            <BigText>Game over!</BigText>
-        </MessageBox>
-    </Screen>;
+    score: number,
+}, {
+        newGame: {},
+    }> = props =>
+        <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
+            <MessageBox>
+                <Stack>
+                    <BigText>Game over!</BigText>
+                    <BigText>Your score: {props.score}</BigText>
+                    <NewGameComp newGame={props.newGame} />
+                </Stack>
+            </MessageBox>
+        </Screen>;
 
 type BoardActions = ActionsTemplate;
 const BoardComp: Comp<Board, BoardActions> = props =>
-        <Stack align="center" margin={10}>
-            <GameOverComp over={props.isGameOver} />
-            <ScoreComp score={props.score} />
-            <CellsComp { ...props } />
-            <HandComp { ...props } />
-            <NewGameComp onClick={props.newGame} />
-        </Stack>;
+    <Stack align="center" margin={10}>
+        <GameOverComp
+            over={props.isGameOver}
+            newGame={props.newGame}
+            score={props.score}
+        />
+        <ScoreComp score={props.score} />
+        <CellsComp { ...props } />
+        <HandComp { ...props } />
+        <NewGameComp newGame={props.newGame} />
+    </Stack>;
 
 const GameComp: React.SFC<{
     store: Game,
