@@ -1,8 +1,9 @@
 import * as React from "react";
-import { CallbacksOpt, apply, hoverable, } from "./comp-utils";
-import { MtxIdx } from "../utils";
+import { CallbacksOpt, apply, hoverable, Callbacks, } from "./comp-utils";
+import { MtxIdx, KeyRestriction } from "../utils";
 
 type SFC<T = {}> = React.SFC<T>;
+export type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & Callbacks<A>>;
 
 export type Size = number | string;
 export type FontWeight =
@@ -28,7 +29,7 @@ type TextProps = {
     size: Size,
     weight?: FontWeight,
     color?: Color,
-}
+};
 const Text: SFC<TextProps> = props =>
     <div
         style={{
@@ -55,7 +56,7 @@ const TextButton: SFC<TextProps & {
                     // textDecoration: "underline",
                     borderBottom: "0.3em dotted",
                     cursor: "pointer",
-                }
+                },
             }}
         >
             {props.text}

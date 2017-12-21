@@ -11,9 +11,9 @@ export type CallbacksOpt<A> = Partial<Callbacks<A>>;
 type SFC<T = {}> = React.SFC<T>;
 
 export function apply<T>(Comp: SFC<T>) {
-    return function<P extends keyof T>(partial: Pick<T, P>): SFC<Partialize<T, P>> {
+    return <P extends keyof T>(partial: Pick<T, P>): SFC<Partialize<T, P>> => {
         return props => React.createElement(Comp, { ...(partial as any), ...(props as any) });
-    }
+    };
 }
 
 export function hoverable<T>(Comp: SFC<T>): SFC<T> {

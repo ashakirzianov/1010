@@ -14,7 +14,7 @@ export type Partialize<T, U extends keyof T> = {
 
 export type KeyRestriction<T, U extends string> = {
     [k in StringIntersection<keyof T, U>]: never
-} &  { 
+} &  {
     [k in U]?: undefined
 };
 
