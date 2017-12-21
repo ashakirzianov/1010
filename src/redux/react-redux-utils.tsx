@@ -1,17 +1,17 @@
 import * as React from "react";
-import { Dispatch, connect, InferableComponentEnhancerWithProps, Component } from "react-redux";
-import { AnyAction } from "redux";
-import { mapObject } from "../utils";
-import { ActionDispatchers, ActionCreators } from "./redux-utils";
+import { AnyAction, combineReducers as combineReducersRedux } from "redux";
+import { Dispatch, connect } from "react-redux";
+import { mapObject, KeyRestriction } from "../utils";
+import { ActionDispatchers, ActionCreators, Reducer, ReducerTemplate, buildPartialReducer } from "./redux-utils";
 
 export type TopComponent<Store, ActionsTemplate> = React.SFC<{
     store: Store,
     callbacks: ActionDispatchers<ActionsTemplate>,
 }>;
 
-export function connectTopLevel<Store, Actions>(
-    Comp: TopComponent<Store, Actions>,
-    actionCreators: ActionCreators<Actions>,
+export function connectTopLevel<Store, ActionsTemplate>(
+    Comp: TopComponent<Store, ActionsTemplate>,
+    actionCreators: ActionCreators<ActionsTemplate>,
 ) {
     function mapStateToProps(store: Store) {
         return {
@@ -32,4 +32,22 @@ export function connectTopLevel<Store, Actions>(
     const connector = connect(mapStateToProps, mapDispatchToProps);
 
     return connector(Comp);
+}
+
+export type ReducersMap<Store, ActionsTemplate> = {
+    [k in keyof Store]: Reducer<Store[k], ActionsTemplate>;
+};
+export function combineReducers<Store, ActionsTemplate>(map: ReducersMap<Store, ActionsTemplate>) {
+    // This is workaround for issue in redux: https://github.com/reactjs/redux/issues/2709
+    return combineReducersRedux<Store>(map as any);
+}
+
+type NoNew<State> = KeyRestriction<State, "new">;
+export type CombineReducersObject<Store extends NoNew<Store>, ActionTemplate> = {
+    [k in keyof Store]: Partial<ReducerTemplate<Store, ActionTemplate>>;
+};
+
+export function combineReducersTemplate<Store extends NoNew<Store>, ActionsTemplate>(
+    o: CombineReducersObject<Store, ActionsTemplate>) {
+    return combineReducers(mapObject(o, (k, v) => buildPartialReducer(v)));
 }

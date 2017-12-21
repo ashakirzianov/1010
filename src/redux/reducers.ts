@@ -1,8 +1,8 @@
 import { buildReducer, bugWorkaround, buildPartialReducer } from "./redux-utils";
-import { Board, Game } from "../model/game";
+import { Board, Game, GameSettings } from "../model/game";
 import { ActionsTemplate } from "../model/actions";
 import { tryPlaceCurrentFigure } from "../model/logic";
-import { combineReducers } from "redux";
+import { combineReducers } from "./react-redux-utils";
 
 const board = buildReducer<Board, ActionsTemplate>({
     takeFigure: (s, p) => ({
@@ -19,10 +19,10 @@ const board = buildReducer<Board, ActionsTemplate>({
     }),
 });
 
-const settings = buildPartialReducer<Board, ActionsTemplate>({
+const settings = buildPartialReducer<GameSettings, ActionsTemplate>({
 });
 
-export const reducer = combineReducers<Game>({
-    board: bugWorkaround(board),
-    settings: bugWorkaround(settings),
+export const reducer = combineReducers<Game, ActionsTemplate>({
+    board,
+    settings,
 });

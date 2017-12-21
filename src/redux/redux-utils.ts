@@ -36,7 +36,7 @@ export type ReducerTemplate<State extends NoNew<State>, Template> = {
     [k in keyof Template]: SingleReducer<State, Template[k]>;
 };
 
-type Reducer<State, Template> =
+export type Reducer<State, Template> =
     (state: State | undefined, action: ActionTypes<Template>) => State;
 
 export function buildReducer<State extends NoNew<State>, Template>(
