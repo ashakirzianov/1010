@@ -1,4 +1,4 @@
-import { buildReducer, bugWorkaround } from "./redux-utils";
+import { buildReducer, bugWorkaround, buildPartialReducer } from "./redux-utils";
 import { Board, Game } from "../model/game";
 import { ActionsTemplate } from "../model/actions";
 import { tryPlaceCurrentFigure } from "../model/logic";
@@ -19,8 +19,7 @@ const board = buildReducer<Board, ActionsTemplate>({
     }),
 });
 
-const settings = buildReducer<Board, ActionsTemplate>({
-    default: s => s,
+const settings = buildPartialReducer<Board, ActionsTemplate>({
 });
 
 export const reducer = combineReducers<Game>({
