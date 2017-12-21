@@ -6,3 +6,4 @@ export const actionsTemplate = {
     placeOn: def(),
     newGame: def(),
 };
+export type ActionsTemplate = typeof actionsTemplate;
