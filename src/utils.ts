@@ -1,10 +1,22 @@
-export type Diff<T extends string, U extends string> =
+export type StringDiff<T extends string, U extends string> =
     ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T];
 
-export type Inter<T extends string, U extends string> =
-    Diff<T | U, Diff<T, U> | Diff<U, T>>;
+export type StringIntersection<T extends string, U extends string> =
+    StringDiff<T | U, StringDiff<T, U> | StringDiff<U, T>>;
 
-export type KeyRestriction<T, U extends string> = { [k in Inter<keyof T, U>]: never } &  { [k in U]?: undefined };
+export type TypeDiff<T, U> = {
+    [k in StringDiff<keyof T, keyof U>]: T[k];
+};
+
+export type Partialize<T, U extends keyof T> = {
+    [k in StringDiff<keyof T, U>]: T[k];
+} & Partial<T>;
+
+export type KeyRestriction<T, U extends string> = {
+    [k in StringIntersection<keyof T, U>]: never
+} &  { 
+    [k in U]?: undefined
+};
 
 export type RestrictedComb<T extends KeyRestriction<T, keyof U>, U> = T & U;
 

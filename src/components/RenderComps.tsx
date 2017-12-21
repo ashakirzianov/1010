@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CallbacksOpt } from "./comp-utils";
+import { CallbacksOpt, apply, hoverable, } from "./comp-utils";
 import { MtxIdx } from "../utils";
 
 type SFC<T = {}> = React.SFC<T>;
@@ -23,36 +23,44 @@ const Div: SFC<{
             {props.children}
         </div>;
 
-const GenericText: SFC<{
+type TextProps = {
+    text: string,
     size: Size,
     weight?: FontWeight,
     color?: Color,
-}> = props =>
-        <div
+}
+const Text: SFC<TextProps> = props =>
+    <div
+        style={{
+            fontFamily: "Open Sans",
+            fontSize: props.size,
+            fontWeight: props.weight,
+            color: props.color,
+        }}
+    >
+        {props.text}
+    </div>;
+
+const TextButton: SFC<TextProps & {
+    onClick?: (x?: any) => void,
+}> = hoverable(props =>
+        <a
+            onClick={() => props.onClick && props.onClick()}
             style={{
                 fontFamily: "Open Sans",
                 fontSize: props.size,
                 fontWeight: props.weight,
                 color: props.color,
+                ":hover": {
+                    // textDecoration: "underline",
+                    borderBottom: "0.3em dotted",
+                    cursor: "pointer",
+                }
             }}
         >
-            {props.children}
-        </div>;
-
-const BigText: SFC = props => <GenericText size="2em" weight={400} color="#4286f4" { ...props } />;
-
-function makeButton<T>(Comp: SFC<T>) {
-    const Button: SFC<{
-        onClick?: (x: any) => void;
-    }> = props =>
-        <div onClick={() => props.onClick && props.onClick(null)}>
-            <Comp>{props.children}</Comp>
-        </div>;
-
-    return Button;
-}
-
-const BigButton = makeButton(BigText);
+            {props.text}
+        </a>
+);
 
 export type LayoutProps = {
     align?: AlignValue,
@@ -163,22 +171,22 @@ const MessageBox: SFC<{
     padding?: Size,
     marginTop?: Size,
 }> = props =>
-    <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderStyle: "solid",
-        borderWidth: props.borderWidth || "2px",
-        marginTop: props.marginTop || "-20%",
-        padding: props.padding || "10%",
-        background: props.background || "rgba(250, 250, 250, 0.8)",
-    }}>
-        {props.children}
-    </div>;
+        <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            borderStyle: "solid",
+            borderWidth: props.borderWidth || "2px",
+            marginTop: props.marginTop || "-20%",
+            padding: props.padding || "10%",
+            background: props.background || "rgba(250, 250, 250, 0.8)",
+        }}>
+            {props.children}
+        </div>;
 
 export {
     Div,
-    BigText, BigButton,
+    Text, TextButton,
     Line, Stack,
     Grid,
     Screen, MessageBox,
