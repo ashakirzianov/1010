@@ -2,12 +2,15 @@ import * as React from "react";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { GameGridComp, GameGridCell } from "./GameGrid";
 import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx, KeyRestriction } from "../utils";
-import { Stack, Line, Div, BigText, Screen, MessageBox, BigButton } from "./RenderComps";
-import { Callbacks } from "./comp-utils";
+import { Stack, Line, Div, Screen, MessageBox, Text, TextButton } from "./RenderComps";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 import { ActionsTemplate } from "../model/actions";
+import { apply, Callbacks } from "./comp-utils";
 
 type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & Callbacks<A>>;
+
+const BigText = apply(Text)({size: "2em", weight: 400, color: "#4286f4" });
+const BigTextButton = apply(TextButton)({size: "3em", weight: 400, color: "#4286f4", onClick: undefined })
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
     <GameGridComp
@@ -23,7 +26,7 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
 
 const ScoreComp: Comp<{ score: number }> = props =>
     <Line>
-        <BigText>{props.score.toString()}</BigText>
+        <BigText text={`Score: ${props.score.toString()}`} />
     </Line>;
 
 const CellsComp: typeof BoardComp = props =>
@@ -51,9 +54,7 @@ const HandComp: typeof BoardComp = props =>
 const NewGameComp: Comp<{}, {
     newGame: {},
 }> = props =>
-        <BigButton onClick={props.newGame}>
-            New game
-    </BigButton>;
+        <BigTextButton onClick={props.newGame} text="New game" />;
 
 const GameOverComp: Comp<{
     over: boolean,
@@ -64,8 +65,8 @@ const GameOverComp: Comp<{
         <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
             <MessageBox>
                 <Stack>
-                    <BigText>Game over!</BigText>
-                    <BigText>Your score: {props.score}</BigText>
+                    <BigText text="Game over!"/>
+                    <BigText text={`Your score: ${props.score}`}/>
                     <NewGameComp newGame={props.newGame} />
                 </Stack>
             </MessageBox>
