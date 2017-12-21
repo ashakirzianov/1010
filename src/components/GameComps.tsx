@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
-import { GameGridComp, GameGridCell } from "./GameGrid";
+import { GameGridComp, GameGridCell } from "./Styled";
 import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx, KeyRestriction } from "../utils";
-import { Stack, Line, Div, Screen, MessageBox, Text, TextButton } from "./RenderComps";
+import { Stack, Line, Div, Screen, MessageBox, Text, TextButton } from "./Library";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 import { ActionsTemplate } from "../model/actions";
 import { apply, Callbacks } from "./comp-utils";

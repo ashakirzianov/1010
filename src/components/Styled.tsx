@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Palette, VisualSettings, visualSettings, ColorCode, cellColor } from "../visuals";
 import { mapMtx } from "../utils";
-import { Grid, GridCell } from "./RenderComps";
+import { Grid, GridCell } from "./Library";
 import { CallbacksOpt } from "./comp-utils";
 import { Cell } from "../model/game";
 
