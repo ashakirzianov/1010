@@ -50,10 +50,7 @@ const HandComp: typeof BoardComp = props =>
 const NewGameComp: Comp<{}, {
     onClick: {},
 }> = props =>
-    <BigButton onClick={x =>{
-        console.debug("hello");
-        props.onClick && props.onClick({});
-    }}>
+    <BigButton onClick={props.onClick}>
         New game
     </BigButton>;
 
@@ -83,10 +80,10 @@ const BoardComp: Comp<Board, BoardActions> = props =>
 
 const GameComp: React.SFC<{
     store: Game,
-    actions: Callbacks<BoardActions>,
+    callbacks: Callbacks<BoardActions>,
 }> = props =>
         <BoardComp
-            { ...props.actions }
+            { ...props.callbacks }
             {...props.store.board }
         />;
 

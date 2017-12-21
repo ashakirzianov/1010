@@ -6,9 +6,9 @@ import { store } from "./redux/store";
 import { GameComp } from "./components/GameComps";
 import { connectTopLevel } from "./redux/react-redux-utils";
 import { actionCreators } from "./redux/redux-utils";
-import { actionTemplates } from "./model/actions";
+import { actionsTemplate } from "./model/actions";
 
-const allActionCreators = actionCreators(actionTemplates);
+const allActionCreators = actionCreators(actionsTemplate);
 export const App = connectTopLevel(GameComp, allActionCreators);
 
 ReactDOM.render(

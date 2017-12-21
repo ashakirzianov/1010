@@ -4,45 +4,32 @@ import { AnyAction } from "redux";
 import { mapObject } from "../utils";
 import { ActionDispatchers, ActionCreators } from "./redux-utils";
 
-export type TopComponent<Store, Actions> = React.SFC<{
+export type TopComponent<Store, ActionsTemplate> = React.SFC<{
     store: Store,
-    actions: ActionDispatchers<Actions>,
+    callbacks: ActionDispatchers<ActionsTemplate>,
 }>;
 
 export function connectTopLevel<Store, Actions>(
     Comp: TopComponent<Store, Actions>,
     actionCreators: ActionCreators<Actions>,
 ) {
-    const Main: React.SFC<CompProps> = props =>
-        <Comp
-            { ...props }
-        />;
-
     function mapStateToProps(store: Store) {
         return {
             store: store,
         };
     }
 
-    function mapDispatchToProps(dispatch: Dispatch<AnyAction>, own: {}) {
-        function wrapActions<T>(actions: ActionCreators<T>): ActionDispatchers<T> {
-            return mapObject(actions, (key, value) => (x: any) => dispatch(value(x)));
+    function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
+        function buildCallbacks<T>(creators: ActionCreators<T>): ActionDispatchers<T> {
+            return mapObject(creators, (key, value) => (x: any) => dispatch(value(x)));
         }
 
         return {
-            actions: wrapActions(actionCreators),
+            callbacks: buildCallbacks(actionCreators),
         };
     }
 
-    const connector = connect(
-        mapStateToProps,
-        mapDispatchToProps);
-
-    function extractResultType<R>(f: InferableComponentEnhancerWithProps<R, any>): R {
-        return undefined as any as R;
-    }
-    const typeVar = extractResultType(connector);
-    type CompProps = typeof typeVar;
+    const connector = connect(mapStateToProps, mapDispatchToProps);
 
     return connector(Comp);
 }

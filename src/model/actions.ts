@@ -1,6 +1,6 @@
 import { defOpt, def, MtxIdx } from "../utils";
 
-export const actionTemplates = {
+export const actionsTemplate = {
     takeFigure: defOpt<number>(),
     targetOver: defOpt<MtxIdx>(),
     placeOn: def(),

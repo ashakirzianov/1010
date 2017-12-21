@@ -39,7 +39,7 @@ const GenericText: SFC<{
             {props.children}
         </div>;
 
-const BigText: SFC = props => <GenericText size="2em" weight={400} color="#4286f4" { ...props } />
+const BigText: SFC = props => <GenericText size="2em" weight={400} color="#4286f4" { ...props } />;
 
 function makeButton<T>(Comp: SFC<T>) {
     const Button: SFC<{
@@ -48,7 +48,7 @@ function makeButton<T>(Comp: SFC<T>) {
         <div onClick={() => props.onClick && props.onClick(null)}>
             <Comp>{props.children}</Comp>
         </div>;
-    
+
     return Button;
 }
 
