@@ -37,6 +37,7 @@ function buildBoard(settings: GameSettings): Board {
         placePosition: undefined,
         isGameOver: false,
         nextHand: nextHand,
+        nextGame: () => buildBoard(settings),
     };
 }
 

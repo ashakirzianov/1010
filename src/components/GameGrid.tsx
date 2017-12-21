@@ -2,7 +2,7 @@ import * as React from "react";
 import { Palette, VisualSettings, visualSettings, ColorCode, cellColor } from "../visuals";
 import { mapMtx } from "../utils";
 import { Grid, GridCell } from "./RenderComps";
-import { Actions } from "./comp-utils";
+import { CallbacksOpt } from "./comp-utils";
 import { Cell } from "../model/game";
 
 export type GameGridCell = {
@@ -11,7 +11,7 @@ export type GameGridCell = {
 };
 type GameGridProps = {
     cells: GameGridCell[][],
-} & Actions<{
+} & CallbacksOpt<{
     onClick: [number, number],
     mouseOverCell: [number, number] | undefined,
 }>;

@@ -1,33 +1,28 @@
-import { combineReducers, AnyAction } from "redux";
-import { Store } from "./store";
-import { Board, GameSettings } from "../model/game";
-import { combineLayers, tryPlaceCurrentFigure } from "../model/logic";
+import { buildReducer, bugWorkaround, buildPartialReducer } from "./redux-utils";
+import { Board, Game, GameSettings } from "../model/game";
+import { ActionsTemplate } from "../model/actions";
+import { tryPlaceCurrentFigure } from "../model/logic";
+import { combineReducers } from "./react-redux-utils";
 
-function board(store: Board = null as any, action: AnyAction): Board {
-    switch (action.type) {
-        case "TAKE_FIGURE":
-            return {
-                ...store,
-                figureInHand: store.figureInHand === action.payload ?
-                    undefined : action.payload,
-            };
-        case "TARGET_OVER":
-            return {
-                ...store,
-                placePosition: action.payload,
-            };
-        case "PLACE_ON":
-            return tryPlaceCurrentFigure(store);
-        default:
-            return store;
-    }
-}
+const board = buildReducer<Board, ActionsTemplate>({
+    takeFigure: (s, p) => ({
+        figureInHand: s.figureInHand === p ? undefined : p,
+    }),
+    targetOver: (s, p) => ({
+        placePosition: p,
+    }),
+    placeOn: (s, p) => ({
+        new: tryPlaceCurrentFigure(s),
+    }),
+    newGame: (s, p) => ({
+        new: s.nextGame(),
+    }),
+});
 
-function gameSettings(store: GameSettings = null as any, action: AnyAction) {
-    return store;
-}
+const settings = buildPartialReducer<GameSettings, ActionsTemplate>({
+});
 
-export const reducer = combineReducers<Store>({
-    board: board,
-    settings: gameSettings,
+export const reducer = combineReducers<Game, ActionsTemplate>({
+    board,
+    settings,
 });

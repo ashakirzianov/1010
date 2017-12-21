@@ -1,4 +1,12 @@
-import { arch } from "os";
+export type Diff<T extends string, U extends string> =
+    ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T];
+
+export type Inter<T extends string, U extends string> =
+    Diff<T | U, Diff<T, U> | Diff<U, T>>;
+
+export type KeyRestriction<T, U extends string> = { [k in Inter<keyof T, U>]: never } &  { [k in U]?: undefined };
+
+export type RestrictedComb<T extends KeyRestriction<T, keyof U>, U> = T & U;
 
 export function range(end: number): number[];
 // tslint:disable-next-line:unified-signatures
@@ -156,4 +164,24 @@ export function combineF<S, T, U>(f: (x: T) => U, g: (x: S) => T) {
 
 export function combineFs<T>(...fs: Array<(x: T) => T>) {
     return fs.reduce((acc, f) => combineF(acc, f));
+}
+
+export function keys<T>(obj: T): Array<keyof T> {
+    return Object.keys(obj) as any;
+}
+
+export function mapObject<T, U>(
+    obj: T,
+    f: <K extends keyof T, V extends T[K]>(k: K, v: V) => U,
+): { [k in keyof T]: U } {
+    return keys(obj).reduce((acc, key) =>
+        ({ ...acc, [key]: f(key, obj[key]) }), {} as any);
+}
+
+export function def<T>() {
+    return null as any as T;
+}
+
+export function defOpt<T>() {
+    return def<T | undefined>();
 }

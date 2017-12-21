@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { GameGridComp, GameGridCell } from "./GameGrid";
-import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx } from "../utils";
-import { Stack, Line, Div, Label, Screen, MessageBox } from "./RenderComps";
-import { Actions } from "./comp-utils";
+import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx, KeyRestriction } from "../utils";
+import { Stack, Line, Div, BigText, Screen, MessageBox, BigButton } from "./RenderComps";
+import { Callbacks } from "./comp-utils";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
+import { ActionsTemplate } from "../model/actions";
 
-type Comp<P, A = {}> = React.SFC<P & Actions<A>>;
+type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & Callbacks<A>>;
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
     <GameGridComp
@@ -21,9 +22,9 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
     />;
 
 const ScoreComp: Comp<{ score: number }> = props =>
-        <Line>
-            <Label>{ props.score.toString() }</Label>
-        </Line>;
+    <Line>
+        <BigText>{props.score.toString()}</BigText>
+    </Line>;
 
 const CellsComp: typeof BoardComp = props =>
     <Line>
@@ -47,37 +48,50 @@ const HandComp: typeof BoardComp = props =>
         }
     </Line>;
 
+const NewGameComp: Comp<{}, {
+    newGame: {},
+}> = props =>
+        <BigButton onClick={props.newGame}>
+            New game
+    </BigButton>;
+
 const GameOverComp: Comp<{
     over: boolean,
-}> = props =>
-    <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
-        <MessageBox>
-            <Label>Game over!</Label>
-        </MessageBox>
-    </Screen>;
+    score: number,
+}, {
+        newGame: {},
+    }> = props =>
+        <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
+            <MessageBox>
+                <Stack>
+                    <BigText>Game over!</BigText>
+                    <BigText>Your score: {props.score}</BigText>
+                    <NewGameComp newGame={props.newGame} />
+                </Stack>
+            </MessageBox>
+        </Screen>;
 
-const BoardComp: Comp<Board, {
-    placeOn: MtxIdx,
-    takeFigure: number,
-    targetOver: MtxIdx | undefined,
-}> = props =>
-        <Stack align="center" margin={10}>
-            <GameOverComp over={props.isGameOver} />
-            <ScoreComp score={props.score} />
-            <CellsComp { ...props } />
-            <HandComp { ...props } />
-        </Stack>;
+type BoardActions = ActionsTemplate;
+const BoardComp: Comp<Board, BoardActions> = props =>
+    <Stack align="center" margin={10}>
+        <GameOverComp
+            over={props.isGameOver}
+            newGame={props.newGame}
+            score={props.score}
+        />
+        <ScoreComp score={props.score} />
+        <CellsComp { ...props } />
+        <HandComp { ...props } />
+        <NewGameComp newGame={props.newGame} />
+    </Stack>;
 
-const GameComp: Comp<Game, {
-    takeFigure: number,
-    targetOver: MtxIdx | undefined,
-    placeOn: MtxIdx,
+const GameComp: React.SFC<{
+    store: Game,
+    callbacks: Callbacks<BoardActions>,
 }> = props =>
         <BoardComp
-            targetOver={props.targetOver}
-            takeFigure={props.takeFigure}
-            placeOn={props.placeOn}
-            {...props.board}
+            { ...props.callbacks }
+            {...props.store.board }
         />;
 
 export { GameComp };
