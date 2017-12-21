@@ -1,14 +1,12 @@
-import { arch } from "os";
-
 export type Diff<T extends string, U extends string> =
     ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T];
 
 export type Inter<T extends string, U extends string> =
     Diff<T | U, Diff<T, U> | Diff<U, T>>;
 
-export type KeyRestriction<T, U> = { [k in Inter<keyof T, keyof U>]: never };
+export type KeyRestriction<T, U extends string> = { [k in Inter<keyof T, U>]: never };
 
-export type RestrictedComb<T extends KeyRestriction<T, U>, U> = T & U;
+export type RestrictedComb<T extends KeyRestriction<T, keyof U>, U> = T & U;
 
 export function range(end: number): number[];
 // tslint:disable-next-line:unified-signatures

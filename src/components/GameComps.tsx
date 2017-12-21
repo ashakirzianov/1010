@@ -6,7 +6,7 @@ import { Stack, Line, Div, BigText, Screen, MessageBox, BigButton } from "./Rend
 import { Actions } from "./comp-utils";
 import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 
-type Comp<P extends KeyRestriction<P, A>, A = {}> = React.SFC<P & Actions<A>>;
+type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & Actions<A>>;
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
     <GameGridComp
