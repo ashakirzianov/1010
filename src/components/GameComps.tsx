@@ -1,17 +1,17 @@
 import * as React from "react";
+import {
+    StyledGameGrid, GameGridCell, BigText,
+    BigTextButton, Comp, Line,
+    Screen, MessageBox, Stack,
+} from "./Styled";
+import { mapMtx, MtxIdx } from "../utils";
+import { Callbacks } from "./comp-utils";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
-import { GameGridComp, GameGridCell } from "./Styled";
-import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx, KeyRestriction } from "../utils";
-import { Stack, Line, Div, Screen, MessageBox, Text, TextButton, Comp } from "./Library";
-import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 import { ActionsTemplate } from "../model/actions";
-import { apply, Callbacks } from "./comp-utils";
-
-const BigText = apply(Text)({size: "2em", weight: 400, color: "#4286f4" });
-const BigTextButton = apply(TextButton)({size: "3em", weight: 400, color: "#4286f4", onClick: undefined });
+import { placeFigureOn, figureInHand } from "../model/logic";
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
-    <GameGridComp
+    <StyledGameGrid
         onClick={props.onClick}
         cells={mapMtx(props.shape, sc => sc === 1
             ? {
@@ -29,7 +29,7 @@ const ScoreComp: Comp<{ score: number }> = props =>
 
 const CellsComp: typeof BoardComp = props =>
     <Line>
-        <GameGridComp
+        <StyledGameGrid
             mouseOverCell={props.targetOver}
             onClick={props.placeOn}
             cells={combinedCells(props)}
