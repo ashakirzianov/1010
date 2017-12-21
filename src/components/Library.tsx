@@ -1,8 +1,7 @@
 import * as React from "react";
 import { CallbacksOpt, apply, hoverable, Callbacks, } from "./comp-utils";
-import { MtxIdx, KeyRestriction } from "../utils";
+import { MtxIdx, KeyRestriction, TypeDiff } from "../utils";
 
-type SFC<T = {}> = React.SFC<T>;
 export type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & CallbacksOpt<A>>;
 
 export type Size = number | string;
@@ -11,7 +10,7 @@ export type FontWeight =
     | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 export type DisplayValue = "block" | "inline" | "inline-block";
 export type AlignValue = "left" | "center" | "right";
-const Div: SFC<{
+const Div: Comp<{
     display?: DisplayValue,
     align?: AlignValue,
     margin?: Size,
@@ -30,7 +29,7 @@ type TextProps = {
     weight?: FontWeight,
     color?: Color,
 };
-const Text: SFC<TextProps> = props =>
+const Text: Comp<TextProps> = props =>
     <div
         style={{
             fontFamily: "Open Sans",
@@ -42,7 +41,7 @@ const Text: SFC<TextProps> = props =>
         {props.text}
     </div>;
 
-const TextButton: SFC<TextProps & {
+const TextButton: Comp<TextProps & {
     onClick?: (x?: any) => void,
 }> = hoverable(props =>
         <a
@@ -67,7 +66,7 @@ export type LayoutProps = {
     align?: AlignValue,
     margin?: Size,
 };
-export type LayoutComp = SFC<LayoutProps>;
+export type LayoutComp = Comp<LayoutProps>;
 const Line: LayoutComp = props =>
     <Div>
         {
@@ -105,7 +104,7 @@ export type GridCell = {
     color: Color,
     borderColor?: Color,
 };
-const Grid: SFC<{
+const Grid: Comp<{
     rows: GridCell[][],
     cellSize: Size,
     borderRadius?: Size,
@@ -141,7 +140,7 @@ const Grid: SFC<{
             </tbody>
         </table>;
 
-const Screen: SFC<{
+const Screen: Comp<{
     visible?: boolean,
     background?: Color,
 }> = props =>
@@ -165,7 +164,7 @@ const Screen: SFC<{
             </div>
             : <div style={{ display: "none" }} />;
 
-const MessageBox: SFC<{
+const MessageBox: Comp<{
     top?: Size,
     background?: Color,
     borderWidth?: Size,
