@@ -54,6 +54,7 @@ const textStyles = buildMap<TextStyle>()({
     black: { color: "#000000" },
     orange: { color: "#f4bc42" },
     red: { color: "#f45c41" },
+    green: { color: "#3daf33" },
     small: {
         fontSize: "1em",
         fontWeight: 400,
@@ -77,6 +78,7 @@ export const LightGrey = styledText(textStyles.lightGrey);
 export const Black = styledText(textStyles.black);
 export const Orange = styledText(textStyles.orange);
 export const Red = styledText(textStyles.red);
+export const Green = styledText(textStyles.green);
 
 const Small = styledText(textStyles.small);
 const Medium = styledText(textStyles.medium);

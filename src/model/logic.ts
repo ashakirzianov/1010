@@ -35,7 +35,7 @@ function buildBoard(settings: GameSettings): Board {
         availableFigures: nextHand(),
         figureInHand: undefined,
         placePosition: undefined,
-        isGameOver: true,
+        isGameOver: false,
         nextHand: nextHand,
         nextGame: () => buildBoard(settings),
     };

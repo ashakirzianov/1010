@@ -2,7 +2,7 @@ import * as React from "react";
 import {
     StyledGameGrid, GameGridCell, Big,
     TextButton, Comp, Line,
-    Screen, MessageBox, Stack, Medium, LightGrey, Orange, Bold, Red, StyledText, Black, Padded,
+    Screen, MessageBox, Stack, Medium, LightGrey, Orange, Bold, Red, StyledText, Black, Padded, Green,
 } from "./Styled";
 import { mapMtx, MtxIdx } from "../utils";
 import { Callbacks } from "./comp-utils";
@@ -67,9 +67,16 @@ const GameOverComp: Comp<{
                 <Stack>
                     <StyledText styles={["big", "red"]}>Game over!</StyledText>
                     <Padded padding="5em">
-                        <Medium>
-                            <Black>Score: </Black><Orange><Bold>{props.score.toString()}</Bold></Orange>
-                        </Medium>
+                        <Line>
+                            <Medium>
+                                <Black>Score: </Black><Orange><Bold>{props.score.toString()}</Bold></Orange>
+                            </Medium>
+                        </Line>
+                        <Line>
+                            <Medium>
+                                <Black>Best score: </Black><Green><Bold>0</Bold></Green>
+                            </Medium>
+                        </Line>
                     </Padded>
                     <NewGameComp newGame={props.newGame} />
                 </Stack>
