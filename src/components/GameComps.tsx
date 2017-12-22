@@ -1,19 +1,17 @@
 import * as React from "react";
+import {
+    StyledGameGrid, GameGridCell, Big,
+    TextButton, Comp, Line,
+    Screen, MessageBox, Stack, Medium, LightGrey, Orange, Bold,
+} from "./Styled";
+import { mapMtx, MtxIdx } from "../utils";
+import { Callbacks } from "./comp-utils";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
-import { GameGridComp, GameGridCell } from "./GameGrid";
-import { mapMtx, letExp, itemAtIndex, sizeMtx, MtxIdx, KeyRestriction } from "../utils";
-import { Stack, Line, Div, Screen, MessageBox, Text, TextButton } from "./RenderComps";
-import { makeFigureLayer, combineLayers, placeFigureOn, figureInHand } from "../model/logic";
 import { ActionsTemplate } from "../model/actions";
-import { apply, Callbacks } from "./comp-utils";
-
-type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & Callbacks<A>>;
-
-const BigText = apply(Text)({size: "2em", weight: 400, color: "#4286f4" });
-const BigTextButton = apply(TextButton)({size: "3em", weight: 400, color: "#4286f4", onClick: undefined })
+import { placeFigureOn, figureInHand } from "../model/logic";
 
 const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
-    <GameGridComp
+    <StyledGameGrid
         onClick={props.onClick}
         cells={mapMtx(props.shape, sc => sc === 1
             ? {
@@ -26,12 +24,14 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
 
 const ScoreComp: Comp<{ score: number }> = props =>
     <Line>
-        <BigText text={`Score: ${props.score.toString()}`} />
+        <Big>
+            <LightGrey>Score: </LightGrey><Orange><Bold>{props.score.toString()}</Bold></Orange>
+        </Big>
     </Line>;
 
 const CellsComp: typeof BoardComp = props =>
     <Line>
-        <GameGridComp
+        <StyledGameGrid
             mouseOverCell={props.targetOver}
             onClick={props.placeOn}
             cells={combinedCells(props)}
@@ -54,7 +54,7 @@ const HandComp: typeof BoardComp = props =>
 const NewGameComp: Comp<{}, {
     newGame: {},
 }> = props =>
-        <BigTextButton onClick={props.newGame} text="New game" />;
+        <TextButton onClick={props.newGame}><Big>New game</Big></TextButton>;
 
 const GameOverComp: Comp<{
     over: boolean,
@@ -62,11 +62,11 @@ const GameOverComp: Comp<{
 }, {
         newGame: {},
     }> = props =>
-        <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
+        <Screen visible={props.over}>
             <MessageBox>
                 <Stack>
-                    <BigText text="Game over!"/>
-                    <BigText text={`Your score: ${props.score}`}/>
+                    <Big>Game over!</Big>
+                    <Big>{`Your score: ${props.score}`}</Big>
                     <NewGameComp newGame={props.newGame} />
                 </Stack>
             </MessageBox>

@@ -1,8 +1,9 @@
 import * as React from "react";
-import { CallbacksOpt, apply, hoverable, } from "./comp-utils";
-import { MtxIdx } from "../utils";
+import { CallbacksOpt, partial, hoverable, Callbacks, Hoverable, } from "./comp-utils";
+import { MtxIdx, KeyRestriction, TypeDiff } from "../utils";
 
-type SFC<T = {}> = React.SFC<T>;
+// export type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & CallbacksOpt<A>>;
+export type Comp<P, A = {}> = React.SFC<P & CallbacksOpt<A>>;
 
 export type Size = number | string;
 export type FontWeight =
@@ -10,7 +11,7 @@ export type FontWeight =
     | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 export type DisplayValue = "block" | "inline" | "inline-block";
 export type AlignValue = "left" | "center" | "right";
-const Div: SFC<{
+const Div: Comp<{
     display?: DisplayValue,
     align?: AlignValue,
     margin?: Size,
@@ -23,50 +24,39 @@ const Div: SFC<{
             {props.children}
         </div>;
 
-type TextProps = {
-    text: string,
-    size: Size,
-    weight?: FontWeight,
+export type TextStyle = Hoverable<{
+    fontSize?: Size,
+    fontWeight?: FontWeight,
     color?: Color,
-}
-const Text: SFC<TextProps> = props =>
-    <div
+    borderBottom?: string,
+    cursor?: "pointer",
+}>;
+const Text: Comp<{
+    style: TextStyle,
+}, {
+}> = hoverable(props =>
+    <span
         style={{
             fontFamily: "Open Sans",
-            fontSize: props.size,
-            fontWeight: props.weight,
-            color: props.color,
+            ...props.style,
         }}
     >
-        {props.text}
-    </div>;
-
-const TextButton: SFC<TextProps & {
-    onClick?: (x?: any) => void,
-}> = hoverable(props =>
-        <a
-            onClick={() => props.onClick && props.onClick()}
-            style={{
-                fontFamily: "Open Sans",
-                fontSize: props.size,
-                fontWeight: props.weight,
-                color: props.color,
-                ":hover": {
-                    // textDecoration: "underline",
-                    borderBottom: "0.3em dotted",
-                    cursor: "pointer",
-                }
-            }}
-        >
-            {props.text}
-        </a>
+        {props.children}
+    </span>
 );
+
+const Button: Comp<{}, {
+    onClick: {},
+}> = props =>
+    <a onClick={() => props.onClick && props.onClick({})}>
+        {props.children}
+    </a>;
 
 export type LayoutProps = {
     align?: AlignValue,
     margin?: Size,
 };
-export type LayoutComp = SFC<LayoutProps>;
+export type LayoutComp = Comp<LayoutProps>;
 const Line: LayoutComp = props =>
     <Div>
         {
@@ -104,7 +94,7 @@ export type GridCell = {
     color: Color,
     borderColor?: Color,
 };
-const Grid: SFC<{
+const Grid: Comp<{
     rows: GridCell[][],
     cellSize: Size,
     borderRadius?: Size,
@@ -140,7 +130,7 @@ const Grid: SFC<{
             </tbody>
         </table>;
 
-const Screen: SFC<{
+const Screen: Comp<{
     visible?: boolean,
     background?: Color,
 }> = props =>
@@ -156,7 +146,7 @@ const Screen: SFC<{
                     height: "100%",
                     left: 0,
                     top: 0,
-                    background: props.background || "rgba(0, 0, 0, 0)",
+                    background: props.background,
                     zIndex: 10,
                 }}
             >
@@ -164,29 +154,27 @@ const Screen: SFC<{
             </div>
             : <div style={{ display: "none" }} />;
 
-const MessageBox: SFC<{
-    top?: Size,
-    background?: Color,
-    borderWidth?: Size,
-    padding?: Size,
-    marginTop?: Size,
+const MessageBox: Comp<{
+    style: {
+        background?: Color,
+        borderWidth?: Size,
+        padding?: Size,
+        marginTop?: Size,
+    },
 }> = props =>
         <div style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             borderStyle: "solid",
-            borderWidth: props.borderWidth || "2px",
-            marginTop: props.marginTop || "-20%",
-            padding: props.padding || "10%",
-            background: props.background || "rgba(250, 250, 250, 0.8)",
+            ...props.style,
         }}>
             {props.children}
         </div>;
 
 export {
     Div,
-    Text, TextButton,
+    Text, Button,
     Line, Stack,
     Grid,
     Screen, MessageBox,
