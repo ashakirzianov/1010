@@ -6,7 +6,7 @@ import {
     Grid, GridCell, Text,
     Line, Stack, Screen, MessageBox, Button, TextStyle,
 } from "./Library";
-import { CallbacksOpt, apply, defaults } from "./comp-utils";
+import { CallbacksOpt, partial, defaults } from "./comp-utils";
 import { Cell } from "../model/game";
 
 export type GameGridCell = {
@@ -31,14 +31,14 @@ const GameGrid: Comp<{
             borderWidth={props.vs.selectedWidth}
         />;
 
-const StyledGameGrid = apply(GameGrid)({
+const StyledGameGrid = partial(GameGrid)({
     vs: visualSettings,
     onClick: undefined,
     mouseOverCell: undefined,
 });
 
 function styledText(style: TextStyle) {
-    return apply(Text)({
+    return partial(Text)({
         style: style,
     });
 }

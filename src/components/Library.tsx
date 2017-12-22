@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CallbacksOpt, apply, hoverable, Callbacks, Hoverable, } from "./comp-utils";
+import { CallbacksOpt, partial, hoverable, Callbacks, Hoverable, } from "./comp-utils";
 import { MtxIdx, KeyRestriction, TypeDiff } from "../utils";
 
 export type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & CallbacksOpt<A>>;

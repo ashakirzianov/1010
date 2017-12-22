@@ -16,7 +16,7 @@ export function defaults<T>(Comp: SFC<T>): Undefined<T> {
     return {} as any;
 }
 
-export function apply<T>(Comp: SFC<T>) {
+export function partial<T>(Comp: SFC<T>) {
     return <P extends keyof T>(partial: Pick<T, P>): SFC<Partialize<T, Pick<T, P>>> => {
         return props => React.createElement(Comp, { ...(partial as any), ...(props as any) });
     };
