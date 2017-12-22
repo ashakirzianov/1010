@@ -62,10 +62,10 @@ const GameOverComp: Comp<{
 }, {
         newGame: {},
     }> = props =>
-        <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
+        <Screen visible={props.over}>
             <MessageBox>
                 <Stack>
-                    <Big>"Game over!"</Big>
+                    <Big>Game over!</Big>
                     <Big>{`Your score: ${props.score}`}</Big>
                     <NewGameComp newGame={props.newGame} />
                 </Stack>

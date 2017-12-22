@@ -2,7 +2,8 @@ import * as React from "react";
 import { CallbacksOpt, partial, hoverable, Callbacks, Hoverable, } from "./comp-utils";
 import { MtxIdx, KeyRestriction, TypeDiff } from "../utils";
 
-export type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & CallbacksOpt<A>>;
+// export type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & CallbacksOpt<A>>;
+export type Comp<P, A = {}> = React.SFC<P & CallbacksOpt<A>>;
 
 export type Size = number | string;
 export type FontWeight =
@@ -47,9 +48,9 @@ const Text: Comp<{
 const Button: Comp<{}, {
     onClick: {},
 }> = props =>
-    <span onClick={() => props.onClick && props.onClick({})}>
+    <a onClick={() => props.onClick && props.onClick({})}>
         {props.children}
-    </span>;
+    </a>;
 
 export type LayoutProps = {
     align?: AlignValue,
@@ -145,7 +146,7 @@ const Screen: Comp<{
                     height: "100%",
                     left: 0,
                     top: 0,
-                    background: props.background || "rgba(0, 0, 0, 0)",
+                    background: props.background,
                     zIndex: 10,
                 }}
             >
@@ -154,21 +155,19 @@ const Screen: Comp<{
             : <div style={{ display: "none" }} />;
 
 const MessageBox: Comp<{
-    top?: Size,
-    background?: Color,
-    borderWidth?: Size,
-    padding?: Size,
-    marginTop?: Size,
+    style: {
+        background?: Color,
+        borderWidth?: Size,
+        padding?: Size,
+        marginTop?: Size,
+    },
 }> = props =>
         <div style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             borderStyle: "solid",
-            borderWidth: props.borderWidth || "2px",
-            marginTop: props.marginTop || "-20%",
-            padding: props.padding || "10%",
-            background: props.background || "rgba(250, 250, 250, 0.8)",
+            ...props.style,
         }}>
             {props.children}
         </div>;
