@@ -25,7 +25,7 @@ export const visualSettings = {
         none: "rgba(0, 0, 0, 0)",
         selected: "orange",
     },
-    cellSize: "2em",
+    cellSize: "2.5em",
     cellMargin: "0.5em",
     cornerRadius: "0.8em",
     selectedWidth: "0.2em",

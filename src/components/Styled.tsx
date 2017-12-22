@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Palette, VisualSettings, visualSettings, ColorCode, cellColor } from "../visuals";
-import { mapMtx, Map } from "../utils";
+import { mapMtx, Map, buildMap } from "../utils";
 import * as Lib from "./Library";
 import { Comp } from "./Library";
 import { CallbacksOpt, partial, defaults } from "./comp-utils";
@@ -41,16 +41,20 @@ function applyStyle<T extends { style: S }, S = T["style"]>(c: Comp<T>) {
 const Text = Lib.Text;
 type TextStyle = Lib.TextStyle;
 
-const textStyles: Map<TextStyle> = {
+const textStyles = buildMap<TextStyle>()({
     hoverable: {
+        borderBottom: "0.1em dotted",
         ":hover": {
             cursor: "pointer",
-            borderBottom: "0.3em dotted",
+            borderBottom: "0.1em solid",
         },
     },
     blue: { color: "#4286f4" },
-    lightGrey: { color: "#CCCCCC" },
+    lightGrey: { color: "#EEEEEE" },
+    black: { color: "#000000" },
     orange: { color: "#f4bc42" },
+    red: { color: "#f45c41" },
+    green: { color: "#3daf33" },
     small: {
         fontSize: "1em",
         fontWeight: 400,
@@ -66,12 +70,15 @@ const textStyles: Map<TextStyle> = {
     bold: {
         fontWeight: 600,
     },
-};
+});
 
 const styledText = applyStyle(Text);
-const Blue = styledText(textStyles.blue);
-const LightGrey = styledText(textStyles.lightGrey);
-const Orange = styledText(textStyles.orange);
+export const Blue = styledText(textStyles.blue);
+export const LightGrey = styledText(textStyles.lightGrey);
+export const Black = styledText(textStyles.black);
+export const Orange = styledText(textStyles.orange);
+export const Red = styledText(textStyles.red);
+export const Green = styledText(textStyles.green);
 
 const Small = styledText(textStyles.small);
 const Medium = styledText(textStyles.medium);
@@ -81,28 +88,37 @@ const Hoverable = styledText(textStyles.hoverable);
 
 const Bold = styledText(textStyles.bold);
 
+export const StyledText: Comp<{
+    styles?: Array<keyof typeof textStyles>,
+}> = props => {
+    const C = styledText((props.styles || []).reduce((acc, sn) =>
+            ({ ...acc, ...textStyles[sn] }), {}));
+    return <C>{props.children}</C>;
+};
+
 const Button = Lib.Button;
 const TextButton: typeof Button = props =>
     <Button {...props}>
-        <Text style={{ ...textStyles.hoverable, ...textStyles.blue, ...textStyles.small }}>
+        <Text style={{ ...textStyles.hoverable, ...textStyles.blue, ...textStyles.medium }}>
             {props.children}
         </Text>
     </Button>;
 
-const Stack = Lib.Stack;
-const Line = Lib.Line;
-const Screen = partial(Lib.Screen)({ background: "rgba(0, 0, 0, 0.2)", visible: undefined });
-const MessageBox = applyStyle(Lib.MessageBox)({
+export const Padded = Lib.Padded;
+export const Stack = Lib.Stack;
+export const Line = Lib.Line;
+export const Screen = partial(Lib.Screen)({ background: "rgba(0, 0, 0, 0.2)", visible: undefined });
+export const MessageBox = applyStyle(Lib.MessageBox)({
     background: "rgba(255, 255, 255, 0.9)",
-    padding: "3em",
+    padding: "2em",
     marginTop: "-25%",
+    boxShadow: "0.35em 0.35em rgba(0, 0, 0, 0.5)",
 });
 
 export {
     StyledGameGrid,
-    Small, Medium, Big, Blue, LightGrey, Orange, Bold,
+    Small, Medium, Big, Bold,
     TextButton,
-    Stack, Line, Screen, MessageBox,
     Comp,
 };
 

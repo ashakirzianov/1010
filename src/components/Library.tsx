@@ -37,7 +37,7 @@ const Text: Comp<{
 }> = hoverable(props =>
     <span
         style={{
-            fontFamily: "Open Sans",
+            fontFamily: "Bitter, serif",
             ...props.style,
         }}
     >
@@ -124,6 +124,7 @@ const Grid: Comp<{
                                 borderColor: cell.borderColor || cell.color,
                                 borderWidth: props.borderWidth,
                                 borderStyle: "solid",
+                                boxSizing: "border-box",
                             }}
                         />)}
                     </tr>)}
@@ -160,22 +161,25 @@ const MessageBox: Comp<{
         borderWidth?: Size,
         padding?: Size,
         marginTop?: Size,
+        boxShadow?: string,
     },
 }> = props =>
         <div style={{
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderStyle: "solid",
             ...props.style,
         }}>
             {props.children}
         </div>;
 
+const Padded: Comp<{
+    padding: Size,
+}> = props =>
+    <div style={{ padding: props.padding}}>{props.children}</div>;
+
 export {
     Div,
     Text, Button,
-    Line, Stack,
+    Line, Stack, Padded,
     Grid,
     Screen, MessageBox,
 };

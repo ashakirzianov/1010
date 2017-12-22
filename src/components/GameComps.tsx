@@ -2,7 +2,7 @@ import * as React from "react";
 import {
     StyledGameGrid, GameGridCell, Big,
     TextButton, Comp, Line,
-    Screen, MessageBox, Stack, Medium, LightGrey, Orange, Bold,
+    Screen, MessageBox, Stack, Medium, LightGrey, Orange, Bold, Red, StyledText, Black, Padded, Green,
 } from "./Styled";
 import { mapMtx, MtxIdx } from "../utils";
 import { Callbacks } from "./comp-utils";
@@ -54,7 +54,7 @@ const HandComp: typeof BoardComp = props =>
 const NewGameComp: Comp<{}, {
     newGame: {},
 }> = props =>
-        <TextButton onClick={props.newGame}><Big>New game</Big></TextButton>;
+        <TextButton onClick={props.newGame}>New game</TextButton>;
 
 const GameOverComp: Comp<{
     over: boolean,
@@ -65,8 +65,19 @@ const GameOverComp: Comp<{
         <Screen visible={props.over}>
             <MessageBox>
                 <Stack>
-                    <Big>Game over!</Big>
-                    <Big>{`Your score: ${props.score}`}</Big>
+                    <StyledText styles={["big", "red"]}>Game over!</StyledText>
+                    <Padded padding="5em">
+                        <Line>
+                            <Medium>
+                                <Black>Score: </Black><Orange><Bold>{props.score.toString()}</Bold></Orange>
+                            </Medium>
+                        </Line>
+                        <Line>
+                            <Medium>
+                                <Black>Best score: </Black><Green><Bold>0</Bold></Green>
+                            </Medium>
+                        </Line>
+                    </Padded>
                     <NewGameComp newGame={props.newGame} />
                 </Stack>
             </MessageBox>
