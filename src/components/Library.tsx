@@ -124,6 +124,7 @@ const Grid: Comp<{
                                 borderColor: cell.borderColor || cell.color,
                                 borderWidth: props.borderWidth,
                                 borderStyle: "solid",
+                                boxSizing: "border-box",
                             }}
                         />)}
                     </tr>)}
@@ -165,7 +166,6 @@ const MessageBox: Comp<{
 }> = props =>
         <div style={{
             display: "flex",
-            borderStyle: "solid",
             ...props.style,
         }}>
             {props.children}
