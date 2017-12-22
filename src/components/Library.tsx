@@ -164,18 +164,21 @@ const MessageBox: Comp<{
 }> = props =>
         <div style={{
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
             borderStyle: "solid",
             ...props.style,
         }}>
             {props.children}
         </div>;
 
+const Padded: Comp<{
+    padding: Size,
+}> = props =>
+    <div style={{ padding: props.padding}}>{props.children}</div>;
+
 export {
     Div,
     Text, Button,
-    Line, Stack,
+    Line, Stack, Padded,
     Grid,
     Screen, MessageBox,
 };

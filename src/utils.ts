@@ -201,3 +201,7 @@ export function def<T = {}>() {
 export function defOpt<T>() {
     return def<T | undefined>();
 }
+
+export function buildMap<T>() {
+    return <M extends Map<T>>(obj: M) => obj;
+}
