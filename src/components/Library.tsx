@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CallbacksOpt, apply, hoverable, Callbacks, } from "./comp-utils";
+import { CallbacksOpt, apply, hoverable, Callbacks, Hoverable, } from "./comp-utils";
 import { MtxIdx, KeyRestriction, TypeDiff } from "../utils";
 
 export type Comp<P extends KeyRestriction<P, keyof A>, A = {}> = React.SFC<P & CallbacksOpt<A>>;
@@ -23,44 +23,33 @@ const Div: Comp<{
             {props.children}
         </div>;
 
-type TextProps = {
-    text: string,
-    size: Size,
-    weight?: FontWeight,
+export type TextStyle = Hoverable<{
+    fontSize?: Size,
+    fontWeight?: FontWeight,
     color?: Color,
-};
-const Text: Comp<TextProps> = props =>
-    <div
+    borderBottom?: string,
+    cursor?: "pointer",
+}>;
+const Text: Comp<{
+    style: TextStyle,
+}, {
+}> = hoverable(props =>
+    <span
         style={{
             fontFamily: "Open Sans",
-            fontSize: props.size,
-            fontWeight: props.weight,
-            color: props.color,
+            ...props.style,
         }}
     >
-        {props.text}
-    </div>;
-
-const TextButton: Comp<TextProps & {
-    onClick?: (x?: any) => void,
-}> = hoverable(props =>
-        <a
-            onClick={() => props.onClick && props.onClick()}
-            style={{
-                fontFamily: "Open Sans",
-                fontSize: props.size,
-                fontWeight: props.weight,
-                color: props.color,
-                ":hover": {
-                    // textDecoration: "underline",
-                    borderBottom: "0.3em dotted",
-                    cursor: "pointer",
-                },
-            }}
-        >
-            {props.text}
-        </a>
+        {props.children}
+    </span>
 );
+
+const Button: Comp<{}, {
+    onClick: {},
+}> = props =>
+    <span onClick={() => props.onClick && props.onClick({})}>
+        {props.children}
+    </span>;
 
 export type LayoutProps = {
     align?: AlignValue,
@@ -186,7 +175,7 @@ const MessageBox: Comp<{
 
 export {
     Div,
-    Text, TextButton,
+    Text, Button,
     Line, Stack,
     Grid,
     Screen, MessageBox,

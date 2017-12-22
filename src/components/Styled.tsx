@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Palette, VisualSettings, visualSettings, ColorCode, cellColor } from "../visuals";
-import { mapMtx } from "../utils";
+import { mapMtx, Map } from "../utils";
 import {
     Comp,
-    Grid, GridCell,
-    TextButton, Text,
-    Line, Stack, Screen, MessageBox,
+    Grid, GridCell, Text,
+    Line, Stack, Screen, MessageBox, Button, TextStyle,
 } from "./Library";
-import { CallbacksOpt, apply } from "./comp-utils";
+import { CallbacksOpt, apply, defaults } from "./comp-utils";
 import { Cell } from "../model/game";
 
 export type GameGridCell = {
@@ -19,9 +18,9 @@ const GameGrid: Comp<{
     cells: GameGridCell[][],
     vs: VisualSettings,
 }, {
-    onClick: [number, number],
-    mouseOverCell: [number, number] | undefined,
-}> = props =>
+        onClick: [number, number],
+        mouseOverCell: [number, number] | undefined,
+    }> = props =>
         <Grid
             mouseOverCell={props.mouseOverCell}
             onClick={props.onClick}
@@ -38,13 +37,62 @@ const StyledGameGrid = apply(GameGrid)({
     mouseOverCell: undefined,
 });
 
-const BigText = apply(Text)({size: "2em", weight: 400, color: "#4286f4" });
-const BigTextButton = apply(TextButton)({size: "3em", weight: 400, color: "#4286f4", onClick: undefined });
+function styledText(style: TextStyle) {
+    return apply(Text)({
+        style: style,
+    });
+}
+
+const styles: Map<TextStyle> = {
+    hoverable: {
+        ":hover": {
+            cursor: "pointer",
+            borderBottom: "0.3em dotted",
+        },
+    },
+    blue: { color: "#4286f4" },
+    lightGrey: { color: "#CCCCCC" },
+    orange: { color: "#f4bc42" },
+    small: {
+        fontSize: "1em",
+        fontWeight: 400,
+    },
+    medium: {
+        fontSize: "1.5em",
+        fontWeight: 400,
+    },
+    big: {
+        fontSize: "2em",
+        fontWeight: 400,
+    },
+    bold: {
+        fontWeight: 600,
+    },
+};
+
+const Blue = styledText(styles.blue);
+const LightGrey = styledText(styles.lightGrey);
+const Orange = styledText(styles.orange);
+
+const Small = styledText(styles.small);
+const Medium = styledText(styles.medium);
+const Big = styledText(styles.big);
+
+const Hoverable = styledText(styles.hoverable);
+
+const Bold = styledText(styles.bold);
+
+const TextButton: typeof Button = props =>
+    <Button {...props}>
+        <Text style={{ ...styles.hoverable, ...styles.blue, ...styles.medium }}>
+            {props.children}
+        </Text>
+    </Button>;
 
 export {
     StyledGameGrid,
-    BigText,
-    BigTextButton,
+    Small, Medium, Big, Blue, LightGrey, Orange, Bold,
+    TextButton,
 };
 
 // Re-exports from Library:

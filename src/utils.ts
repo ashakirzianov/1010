@@ -8,9 +8,11 @@ export type TypeDiff<T, U> = {
     [k in StringDiff<keyof T, keyof U>]: T[k];
 };
 
-export type Partialize<T, U extends keyof T> = {
-    [k in StringDiff<keyof T, U>]: T[k];
+export type Partialize<T, U> = {
+    [k in StringDiff<keyof T, keyof U>]: T[k];
 } & Partial<T>;
+
+export type Undefined<T> = { [t in keyof T]: undefined };
 
 export type KeyRestriction<T, U extends string> = {
     [k in StringIntersection<keyof T, U>]: never
@@ -19,6 +21,8 @@ export type KeyRestriction<T, U extends string> = {
 };
 
 export type RestrictedComb<T extends KeyRestriction<T, keyof U>, U> = T & U;
+
+export type Map<T> = { [k: string]: T };
 
 export function range(end: number): number[];
 // tslint:disable-next-line:unified-signatures

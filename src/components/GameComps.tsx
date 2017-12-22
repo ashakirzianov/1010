@@ -1,8 +1,8 @@
 import * as React from "react";
 import {
-    StyledGameGrid, GameGridCell, BigText,
-    BigTextButton, Comp, Line,
-    Screen, MessageBox, Stack,
+    StyledGameGrid, GameGridCell, Big,
+    TextButton, Comp, Line,
+    Screen, MessageBox, Stack, Medium, LightGrey, Orange, Bold,
 } from "./Styled";
 import { mapMtx, MtxIdx } from "../utils";
 import { Callbacks } from "./comp-utils";
@@ -24,7 +24,9 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
 
 const ScoreComp: Comp<{ score: number }> = props =>
     <Line>
-        <BigText text={`Score: ${props.score.toString()}`} />
+        <Big>
+            <LightGrey>Score: </LightGrey><Orange><Bold>{props.score.toString()}</Bold></Orange>
+        </Big>
     </Line>;
 
 const CellsComp: typeof BoardComp = props =>
@@ -52,7 +54,7 @@ const HandComp: typeof BoardComp = props =>
 const NewGameComp: Comp<{}, {
     newGame: {},
 }> = props =>
-        <BigTextButton onClick={props.newGame} text="New game" />;
+        <TextButton onClick={props.newGame}><Big>New game</Big></TextButton>;
 
 const GameOverComp: Comp<{
     over: boolean,
@@ -63,8 +65,8 @@ const GameOverComp: Comp<{
         <Screen background="rgba(51,51,51,0.7)" visible={props.over}>
             <MessageBox>
                 <Stack>
-                    <BigText text="Game over!"/>
-                    <BigText text={`Your score: ${props.score}`}/>
+                    <Big>"Game over!"</Big>
+                    <Big>{`Your score: ${props.score}`}</Big>
                     <NewGameComp newGame={props.newGame} />
                 </Stack>
             </MessageBox>
