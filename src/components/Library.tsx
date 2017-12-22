@@ -160,6 +160,7 @@ const MessageBox: Comp<{
         borderWidth?: Size,
         padding?: Size,
         marginTop?: Size,
+        boxShadow?: string,
     },
 }> = props =>
         <div style={{

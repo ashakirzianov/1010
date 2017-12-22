@@ -112,6 +112,7 @@ export const MessageBox = applyStyle(Lib.MessageBox)({
     background: "rgba(255, 255, 255, 0.9)",
     padding: "2em",
     marginTop: "-25%",
+    boxShadow: "0.2em 0.2em rgba(0, 0, 0, 0.5)",
 });
 
 export {
