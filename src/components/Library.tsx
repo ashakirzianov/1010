@@ -37,7 +37,7 @@ const Text: Comp<{
 }> = hoverable(props =>
     <span
         style={{
-            fontFamily: "Open Sans",
+            fontFamily: "Bitter, serif",
             ...props.style,
         }}
     >
