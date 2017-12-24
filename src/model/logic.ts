@@ -97,8 +97,8 @@ export function canPlaceFigure(layer: Cell[][], figure?: Figure, position?: MtxI
 }
 
 export function placeCurrentFigure(board: Board): Board {
-    return canPlaceFigure(board.cells, figureInHand(board), board.placePosition)
-        && board.placePosition && board.inHand
+    return board.placePosition && board.inHand
+        && canPlaceFigure(board.cells, figureInHand(board), diffIdx(board.placePosition, board.inHand.dragIdx))
         ? {
             ...board,
             cells: placeFigureOn(board.cells, figureInHand(board), diffIdx(board.placePosition, board.inHand.dragIdx)),
