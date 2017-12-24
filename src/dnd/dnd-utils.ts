@@ -4,7 +4,9 @@ import {
     DragDropContext, DropTargetConnector, DropTargetMonitor, ConnectDropTarget, DropTarget,
 } from "react-dnd";
 import { def, mapObject, ValueConstraint } from "../utils";
-import HTML5Backend from "react-dnd-html5-backend";
+import MultiBackend from "react-dnd-multi-backend";
+// tslint:disable-next-line:no-submodule-imports
+import HTML5toTouch from "react-dnd-multi-backend/lib/HTML5toTouch";
 import { Key } from "readline";
 
 type SFC<T> = React.SFC<T>;
@@ -133,5 +135,5 @@ export function buildConnectors<T extends Constraint<T>>(s: Specs<T>): Connector
 }
 
 export function connectDnd<P>(Comp: React.ComponentClass<P>) {
-    return DragDropContext(HTML5Backend)(Comp);
+    return DragDropContext(MultiBackend(HTML5toTouch))(Comp);
 }

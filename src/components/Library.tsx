@@ -119,8 +119,6 @@ const Grid: Comp<{
                             onMouseLeave={e => props.mouseOverCell && props.mouseOverCell(undefined)}
                             onMouseDown={a => props.onClick && props.onClick([i, j])}
                             onDragEnter={e => props.mouseOverCell && props.mouseOverCell([i, j])}
-                            onDragLeave={e => props.mouseOverCell && props.mouseOverCell(undefined)}
-                            // onClick={a => props.onClick && props.onClick([i, j])}
                             style={{
                                 background: cell.color,
                                 width: props.cellSize,
