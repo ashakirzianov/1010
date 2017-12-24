@@ -1,10 +1,17 @@
 import { def } from "../utils";
-import { buildSourceConnectors, spec } from "./dnd-utils";
+import { buildSourceConnectors, spec, buildTargetConnectors } from "./dnd-utils";
 
 const dndSpecifications = {
-    figureSource: spec({
-        beginDrag: (props: { selected: boolean }) => ({ isSelected: props.selected }),
+    figureToSquare: spec({
+        beginDrag: (props: {}, monitor) => {
+            return {};
+         },
+        drop: (props: { placeOn?: (arg: any) => any }, monitor) => {
+
+            return props.placeOn && props.placeOn({});
+        },
     }),
 };
 
 export const sourceConnectors = buildSourceConnectors(dndSpecifications);
+export const targetConnectors = buildTargetConnectors(dndSpecifications);

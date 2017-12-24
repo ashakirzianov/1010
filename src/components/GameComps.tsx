@@ -10,9 +10,9 @@ import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { ActionsTemplate } from "../model/actions";
 import { placeFigureOn, figureInHand } from "../model/logic";
 import { CompProps } from "./Library";
-import { sourceConnectors } from "../dnd/dnd";
+import { sourceConnectors, targetConnectors } from "../dnd/dnd";
 
-const FigureComp = sourceConnectors.figureSource<CompProps<Figure & {
+const FigureComp = sourceConnectors.figureToSquare<CompProps<Figure & {
     selected: boolean,
 }, { onClick: MtxIdx }>>(props =>
     <StyledGameGrid
@@ -34,14 +34,15 @@ const ScoreComp: Comp<{ score: number }> = props =>
         </Big>
     </Line>;
 
-const CellsComp: typeof BoardComp = props =>
+const CellsComp = targetConnectors.figureToSquare<CompProps<Board, BoardActions>>(props =>
     <Line>
         <StyledGameGrid
             mouseOverCell={props.targetOver}
             onClick={props.placeOn}
             cells={combinedCells(props)}
         />
-    </Line>;
+    </Line>
+);
 
 const HandComp: typeof BoardComp = props =>
     <Line align="center" margin={5}>

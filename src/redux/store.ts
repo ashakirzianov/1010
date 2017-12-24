@@ -4,7 +4,9 @@ import { reducer } from "./reducers";
 import { Game } from "../model/game";
 import { createGame } from "../model/logic";
 
-const middleware = applyMiddleware(logger);
+const middleware = applyMiddleware(
+    // logger,
+);
 
 export type Store = Game;
 const initial: Store = createGame();
