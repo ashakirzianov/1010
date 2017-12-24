@@ -4,7 +4,7 @@ import {
     TextButton, Comp, Line,
     Screen, MessageBox, Stack, Medium, LightGrey, Orange, Bold, Red, StyledText, Black, Padded, Green,
 } from "./Styled";
-import { mapMtx, MtxIdx } from "../utils";
+import { mapMtx, MtxIdx, diffIdx } from "../utils";
 import { Callbacks } from "./comp-utils";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { ActionsTemplate } from "../model/actions";
@@ -49,9 +49,10 @@ const HandComp: typeof BoardComp = props =>
         {
             props.availableFigures.map((f, i) =>
                 <FigureComp
-                    selected={i === props.figureInHand}
+                    selected={ props.inHand !== undefined && i === props.inHand.figure }
                     key={i}
-                    onClick={() => props.takeFigure && props.takeFigure(i)}
+                    onClick={(idx: MtxIdx) =>
+                        props.takeFigure && props.takeFigure({figure: i, dragIdx: idx })}
                     {...f}
                 />)
         }
@@ -131,7 +132,7 @@ function combinedCells(board: Board) {
         placeFigureOn(
             board.cells,
             figureInHand(board),
-            board.placePosition,
+            board.placePosition && board.inHand && diffIdx(board.placePosition, board.inHand.dragIdx),
         ),
         transformToGameGrid,
     );

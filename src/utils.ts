@@ -64,6 +64,18 @@ export type MtxSize = {
     cols: number,
 };
 
+export function invIdx(idx: MtxIdx): MtxIdx {
+    return [-idx[0], -idx[1]];
+}
+
+export function sumIdx(left: MtxIdx, right: MtxIdx): MtxIdx {
+    return [left[0] + right[0], left[1] + right[1]];
+}
+
+export function diffIdx(left: MtxIdx, right: MtxIdx): MtxIdx {
+    return sumIdx(left, invIdx(right));
+}
+
 export function makeMtx<T>(init: T, rows: number, cols: number): T[][] {
     return range(rows).map(i =>
         range(cols).map(j => init));

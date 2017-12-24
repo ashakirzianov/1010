@@ -18,7 +18,7 @@ export type Board = {
     score: number,
     cells: Cell[][],
     availableFigures: Figure[],
-    figureInHand: number | undefined,
+    inHand: { figure: number, dragIdx: MtxIdx } | undefined,
     placePosition?: MtxIdx,
     isGameOver: boolean,
     nextHand: () => Figure[],

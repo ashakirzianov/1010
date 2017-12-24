@@ -3,7 +3,7 @@ import { allFigures } from "./figures";
 import {
     pickRandom, range, mapMtx, sizeMtx, MtxIdx, MtxSize,
     everyMtx, Mtx, removeAtIndex, letExp, columnsMtx, contains,
-    reduceMtx, combineF, combineFs, someMtx,
+    reduceMtx, combineF, combineFs, someMtx, diffIdx,
 } from "../utils";
 import { ColorCode } from "../visuals";
 
@@ -33,7 +33,7 @@ function buildBoard(settings: GameSettings): Board {
             range(settings.boardSize.cols).map<Cell>(j =>
                 ({ cell: "empty" }))),
         availableFigures: nextHand(),
-        figureInHand: undefined,
+        inHand: undefined,
         placePosition: undefined,
         isGameOver: false,
         nextHand: nextHand,
@@ -42,8 +42,8 @@ function buildBoard(settings: GameSettings): Board {
 }
 
 export function figureInHand(board: Board) {
-    return board.figureInHand === undefined ? undefined
-        : board.availableFigures[board.figureInHand];
+    return board.inHand === undefined ? undefined
+        : board.availableFigures[board.inHand.figure];
 }
 
 export function makeFigureLayer(
@@ -98,13 +98,14 @@ export function canPlaceFigure(layer: Cell[][], figure?: Figure, position?: MtxI
 
 export function placeCurrentFigure(board: Board): Board {
     return canPlaceFigure(board.cells, figureInHand(board), board.placePosition)
+        && board.placePosition && board.inHand
         ? {
             ...board,
-            cells: placeFigureOn(board.cells, figureInHand(board), board.placePosition),
+            cells: placeFigureOn(board.cells, figureInHand(board), diffIdx(board.placePosition, board.inHand.dragIdx)),
             score: board.score + scoreFigure(figureInHand(board)),
-            availableFigures: letExp(removeAtIndex(board.availableFigures, board.figureInHand), af =>
+            availableFigures: letExp(removeAtIndex(board.availableFigures, board.inHand.figure), af =>
                 af.length === 0 ? board.nextHand() : af),
-            figureInHand: undefined,
+            inHand: undefined,
         } : { ...board };
 }
 
