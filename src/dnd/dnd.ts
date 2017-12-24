@@ -1,5 +1,5 @@
 import { def } from "../utils";
-import { buildSourceConnectors, spec, buildTargetConnectors } from "./dnd-utils";
+import { spec, buildConnectors } from "./dnd-utils";
 
 const dndSpecifications = {
     figureToSquare: spec({
@@ -13,5 +13,4 @@ const dndSpecifications = {
     }),
 };
 
-export const sourceConnectors = buildSourceConnectors(dndSpecifications);
-export const targetConnectors = buildTargetConnectors(dndSpecifications);
+export const dndConnectors = buildConnectors(dndSpecifications);

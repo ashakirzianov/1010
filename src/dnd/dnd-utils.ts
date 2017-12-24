@@ -9,8 +9,6 @@ import { Key } from "readline";
 
 type SFC<T> = React.SFC<T>;
 
-export type Connector<Props> = <AllProps extends Props>(Comp: SFC<AllProps>) => SFC<AllProps>; // TODO: add key restriction?
-
 export type Constraint<T> = ValueConstraint<T, {
     sourceIn: {},
     sourceOut: {},
@@ -18,11 +16,13 @@ export type Constraint<T> = ValueConstraint<T, {
     targetOut: {},
 }>;
 
-export type SourceConnectors<Template extends Constraint<Template>> = {
-    [T in keyof Template]: Connector<Template[T]["sourceIn"]>;
+export type Connector<Props> = <AllProps extends Props>(Comp: SFC<AllProps>) => SFC<AllProps>; // TODO: add key restriction?
+export type ConnectorsPair<SProps, TProps> = {
+    source: Connector<SProps>,
+    target: Connector<TProps>,
 };
-export type TargetConnectors<Template extends Constraint<Template>> = {
-    [T in keyof Template]: Connector<Template[T]["targetIn"]>;
+export type Connectors<Template extends Constraint<Template>> = {
+    [T in keyof Template]: ConnectorsPair<Template[T]["sourceIn"], Template[T]["targetIn"]>;
 };
 
 export type SourceSpec<SourceProps, SourceRet> = {
@@ -53,22 +53,32 @@ export function spec<
     };
 }
 
-function buildSourceConnector<
+function buildConnectorsPair<
     T extends string,
-    Props, Ret, S extends SourceSpec<Props, Ret>
->(key: T, sourceSpec: S): Connector<Props> {
-    function collect(connect: DragSourceConnector) {
+    SP, SR, TP, TR, S extends Spec<SP, SR, TP, TR>
+>(key: T, dndSpec: S): ConnectorsPair<SP, TP> {
+    function dragCollect(connect: DragSourceConnector) {
         return {
             connectDragSource: connect.dragSource(),
         };
     }
 
+    function dropCollect(connect: DropTargetConnector) {
+        return {
+            connectDropTarget: connect.dropTarget(),
+        };
+    }
+
     const wrappedSource = {
-        beginDrag: (wp: { props: Props }, monitor: DragSourceMonitor) =>
-            sourceSpec.beginDrag(wp.props, monitor),
+        beginDrag: (wp: { props: SP }, monitor: DragSourceMonitor) =>
+            dndSpec.beginDrag(wp.props, monitor),
     };
 
-    return function connector<P extends Props>(Comp: SFC<P>): SFC<P> {
+    const wrappedTarget = {
+        drop: (wp: { props: TP }, monitor: DropTargetMonitor) => dndSpec.drop(wp.props, monitor),
+    };
+
+    function sourceConnector<P extends SP>(Comp: SFC<P>): SFC<P> {
         const wrapped: SFC<{
             props: P,
             connectDragSource: ConnectDragSource,
@@ -81,35 +91,16 @@ function buildSourceConnector<
         const dragSourceComp = DragSource<{
             props: P,
             connectDragSource: ConnectDragSource,
-        }>(key, wrappedSource, collect)(wrapped);
+        }>(key, wrappedSource, dragCollect)(wrapped);
         const connectedComp: SFC<P> = props => React.createElement(
             dragSourceComp,
             { props: props, connectDragSource: undefined as any },
             props.children);
 
         return connectedComp;
-    };
-}
-
-export function buildSourceConnectors<T extends Constraint<T>>(s: Specs<T>): SourceConnectors<T> {
-    return mapObject(s, buildSourceConnector);
-}
-
-function buildTargetConnector<
-    T extends string,
-    Props, Ret, S extends TargetSpec<Props, Ret>
->(key: T, targetSpec: S): Connector<Props> {
-    function collect(connect: DropTargetConnector) {
-        return {
-            connectDropTarget: connect.dropTarget(),
-        };
     }
 
-    const wrappedTarget = {
-        drop: (wp: { props: Props }, monitor: DropTargetMonitor) => targetSpec.drop(wp.props, monitor),
-    };
-
-    return function connector<P extends Props>(Comp: SFC<P>): SFC<P> {
+    function targetConnector<P extends TP>(Comp: SFC<P>): SFC<P> {
         const wrapped: SFC<{
             props: P,
             connectDropTarget: ConnectDropTarget,
@@ -122,18 +113,23 @@ function buildTargetConnector<
         const dropTargetComp = DropTarget<{
             props: P,
             connectDropTarget: ConnectDropTarget,
-        }>(key, wrappedTarget, collect)(wrapped);
+        }>(key, wrappedTarget, dropCollect)(wrapped);
         const connectedComp: SFC<P> = props => React.createElement(
             dropTargetComp,
             { props: props, connectDropTarget: undefined as any },
             props.children);
 
         return connectedComp;
+    }
+
+    return {
+        source: sourceConnector,
+        target: targetConnector,
     };
 }
 
-export function buildTargetConnectors<T extends Constraint<T>>(s: Specs<T>): TargetConnectors<T> {
-    return mapObject(s, buildTargetConnector);
+export function buildConnectors<T extends Constraint<T>>(s: Specs<T>): Connectors<T> {
+    return mapObject(s, buildConnectorsPair);
 }
 
 export function connectDnd<P>(Comp: React.ComponentClass<P>) {
