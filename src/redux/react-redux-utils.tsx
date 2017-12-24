@@ -9,7 +9,7 @@ export type TopComponent<Store, ActionsTemplate> = React.SFC<{
     callbacks: ActionDispatchers<ActionsTemplate>,
 }>;
 
-export function connectTopLevel<Store, ActionsTemplate>(
+export function connectRedux<Store, ActionsTemplate>(
     Comp: TopComponent<Store, ActionsTemplate>,
     actionCreators: ActionCreators<ActionsTemplate>,
 ) {

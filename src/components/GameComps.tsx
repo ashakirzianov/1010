@@ -9,8 +9,12 @@ import { Callbacks } from "./comp-utils";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { ActionsTemplate } from "../model/actions";
 import { placeFigureOn, figureInHand } from "../model/logic";
+import { CompProps } from "./Library";
+import { sourceConnectors } from "../dnd/dnd";
 
-const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
+const FigureComp = sourceConnectors.figureSource<CompProps<Figure & {
+    selected: boolean,
+}, { onClick: MtxIdx }>>(props =>
     <StyledGameGrid
         onClick={props.onClick}
         cells={mapMtx(props.shape, sc => sc === 1
@@ -20,7 +24,8 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
             }
             : { color: "none" as "none" }
         )}
-    />;
+    />
+);
 
 const ScoreComp: Comp<{ score: number }> = props =>
     <Line>
