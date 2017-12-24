@@ -24,6 +24,10 @@ export type RestrictedComb<T extends KeyRestriction<T, keyof U>, U> = T & U;
 
 export type Map<T> = { [k: string]: T };
 
+export type ValueConstraint<T, ValueType> = {
+    [k in keyof T]: ValueType;
+};
+
 export function range(end: number): number[];
 // tslint:disable-next-line:unified-signatures
 export function range(start: number, end: number): number[];

@@ -1,14 +1,10 @@
 import { def } from "../utils";
-import { SourceSpecs, buildSourceConnectors } from "./dnd-utils";
+import { buildSourceConnectors, spec } from "./dnd-utils";
 
-const sourcesTemplate = {
-    figureSource: def(),
+const dndSpecifications = {
+    figureSource: spec({
+        beginDrag: (props: { selected: boolean }) => ({ isSelected: props.selected }),
+    }),
 };
 
-const sources: SourceSpecs<typeof sourcesTemplate> = {
-    figureSource: {
-        beginDrag: props => ({}),
-    },
-};
-
-export const sourceConnectors = buildSourceConnectors(sources);
+export const sourceConnectors = buildSourceConnectors(dndSpecifications);
