@@ -9,6 +9,7 @@ import MultiBackend from "react-dnd-multi-backend";
 import HTML5toTouch from "react-dnd-multi-backend/lib/HTML5toTouch";
 import TouchBackend from "react-dnd-touch-backend";
 import { Key } from "readline";
+import HTML5Backend from "react-dnd-html5-backend";
 
 type SFC<T> = React.SFC<T>;
 
@@ -137,5 +138,6 @@ export function buildConnectors<T extends Constraint<T>>(s: Specs<T>): Connector
 
 export function connectDnd<P>(Comp: React.ComponentClass<P>) {
     // return DragDropContext(MultiBackend(HTML5toTouch))(Comp);
-    return DragDropContext(TouchBackend({ enableMouseEvents: true }))(Comp);
+    // return DragDropContext(TouchBackend({ enableMouseEvents: true }))(Comp);
+    return DragDropContext(HTML5Backend)(Comp);
 }
