@@ -17,8 +17,8 @@ export const visualSettings = {
             "#C6CA53", // 2 square
             "#F7DD72", // 3 corner
             "#9BC1BC", // 2 corner
-            "#248230", // 5 plank
-            "#826a24", // 4 plank
+            "#5bad66", // 5 plank
+            "#ad8c2b", // 4 plank
             "#ACACDE", // 3 plank
             "#ABDAFC", // 2 plank
             "#ED6A5A", // Dot
