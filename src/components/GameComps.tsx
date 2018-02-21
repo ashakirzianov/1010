@@ -4,13 +4,17 @@ import {
     TextButton, Comp, Line,
     Screen, MessageBox, Stack, Medium, LightGrey, Orange, Bold, Red, StyledText, Black, Padded, Green,
 } from "./Styled";
-import { mapMtx, MtxIdx } from "../utils";
+import { mapMtx, MtxIdx, diffIdx } from "../utils";
 import { Callbacks } from "./comp-utils";
 import { Shape, Figure, Game, Board, Cell } from "../model/game";
 import { ActionsTemplate } from "../model/actions";
 import { placeFigureOn, figureInHand } from "../model/logic";
+import { CompProps } from "./Library";
+import { dndConnectors } from "../dnd/dnd";
 
-const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = props =>
+const FigureComp = dndConnectors.figureToSquare.source<CompProps<Figure & {
+    selected: boolean,
+}, { onClick: MtxIdx }>>(props =>
     <StyledGameGrid
         onClick={props.onClick}
         cells={mapMtx(props.shape, sc => sc === 1
@@ -20,7 +24,8 @@ const FigureComp: Comp<Figure & { selected: boolean }, { onClick: MtxIdx }> = pr
             }
             : { color: "none" as "none" }
         )}
-    />;
+    />
+);
 
 const ScoreComp: Comp<{ score: number }> = props =>
     <Line>
@@ -29,23 +34,25 @@ const ScoreComp: Comp<{ score: number }> = props =>
         </Big>
     </Line>;
 
-const CellsComp: typeof BoardComp = props =>
+const CellsComp = dndConnectors.figureToSquare.target<CompProps<Board, BoardActions>>(props =>
     <Line>
         <StyledGameGrid
             mouseOverCell={props.targetOver}
             onClick={props.placeOn}
             cells={combinedCells(props)}
         />
-    </Line>;
+    </Line>
+);
 
 const HandComp: typeof BoardComp = props =>
     <Line align="center" margin={5}>
         {
             props.availableFigures.map((f, i) =>
                 <FigureComp
-                    selected={i === props.figureInHand}
+                    selected={ props.inHand !== undefined && i === props.inHand.figure }
                     key={i}
-                    onClick={() => props.takeFigure && props.takeFigure(i)}
+                    onClick={(idx: MtxIdx) =>
+                        props.takeFigure && props.takeFigure({figure: i, dragIdx: idx })}
                     {...f}
                 />)
         }
@@ -125,7 +132,7 @@ function combinedCells(board: Board) {
         placeFigureOn(
             board.cells,
             figureInHand(board),
-            board.placePosition,
+            board.placePosition && board.inHand && diffIdx(board.placePosition, board.inHand.dragIdx),
         ),
         transformToGameGrid,
     );

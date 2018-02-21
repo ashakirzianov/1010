@@ -4,12 +4,13 @@ import { Provider } from "react-redux";
 
 import { store } from "./redux/store";
 import { GameComp } from "./components/GameComps";
-import { connectTopLevel } from "./redux/react-redux-utils";
+import { connectRedux } from "./redux/react-redux-utils";
 import { actionCreators } from "./redux/redux-utils";
 import { actionsTemplate } from "./model/actions";
+import { connectDnd } from "./dnd/dnd-utils";
 
 const allActionCreators = actionCreators(actionsTemplate);
-export const App = connectTopLevel(GameComp, allActionCreators);
+export const App = connectDnd(connectRedux(GameComp, allActionCreators));
 
 ReactDOM.render(
     <Provider store={store}><App /></Provider>,

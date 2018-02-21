@@ -6,7 +6,7 @@ import { combineReducers } from "./react-redux-utils";
 
 const board = buildReducer<Board, ActionsTemplate>({
     takeFigure: (s, p) => ({
-        figureInHand: s.figureInHand === p ? undefined : p,
+        inHand: s.inHand === p ? undefined : p,
     }),
     targetOver: (s, p) => ({
         placePosition: p,

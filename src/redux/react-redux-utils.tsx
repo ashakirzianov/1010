@@ -9,7 +9,7 @@ export type TopComponent<Store, ActionsTemplate> = React.SFC<{
     callbacks: ActionDispatchers<ActionsTemplate>,
 }>;
 
-export function connectTopLevel<Store, ActionsTemplate>(
+export function connectRedux<Store, ActionsTemplate>(
     Comp: TopComponent<Store, ActionsTemplate>,
     actionCreators: ActionCreators<ActionsTemplate>,
 ) {
@@ -49,5 +49,5 @@ export type CombineReducersObject<Store extends NoNew<Store>, ActionTemplate> = 
 
 export function combineReducersTemplate<Store extends NoNew<Store>, ActionsTemplate>(
     o: CombineReducersObject<Store, ActionsTemplate>) {
-    return combineReducers(mapObject(o, (k, v) => buildPartialReducer(v)));
+    return combineReducers(mapObject(o, (k, v) => buildPartialReducer(v) as any));
 }

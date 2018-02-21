@@ -16,7 +16,7 @@ export type ActionCreators<Template> = { [k in keyof Template]: ActionCreator<k,
 export type ActionDispatcher<Payload> = (payload: Payload) => void;
 export type ActionDispatchers<Template> = { [k in keyof Template]: ActionDispatcher<Template[k]> };
 
-function actionCreator<T extends string, P>(type: T, payload?: P): ActionCreator<T, P> {
+function actionCreator<T extends string>(type: T, payload?: any): ActionCreator<T, any> {
     return p => ({
         type: type,
         payload: p,
@@ -24,7 +24,7 @@ function actionCreator<T extends string, P>(type: T, payload?: P): ActionCreator
 }
 
 export function actionCreators<Template>(actionTemplate: Template): ActionCreators<Template> {
-    return mapObject(actionTemplate, actionCreator);
+    return mapObject(actionTemplate, actionCreator) as any;
 }
 
 // Reducers:

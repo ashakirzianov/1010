@@ -24,6 +24,10 @@ export type RestrictedComb<T extends KeyRestriction<T, keyof U>, U> = T & U;
 
 export type Map<T> = { [k: string]: T };
 
+export type ValueConstraint<T, ValueType> = {
+    [k in keyof T]: ValueType;
+};
+
 export function range(end: number): number[];
 // tslint:disable-next-line:unified-signatures
 export function range(start: number, end: number): number[];
@@ -59,6 +63,18 @@ export type MtxSize = {
     rows: number,
     cols: number,
 };
+
+export function invIdx(idx: MtxIdx): MtxIdx {
+    return [-idx[0], -idx[1]];
+}
+
+export function sumIdx(left: MtxIdx, right: MtxIdx): MtxIdx {
+    return [left[0] + right[0], left[1] + right[1]];
+}
+
+export function diffIdx(left: MtxIdx, right: MtxIdx): MtxIdx {
+    return sumIdx(left, invIdx(right));
+}
 
 export function makeMtx<T>(init: T, rows: number, cols: number): T[][] {
     return range(rows).map(i =>
