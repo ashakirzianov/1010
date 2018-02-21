@@ -137,7 +137,7 @@ export function buildConnectors<T extends Constraint<T>>(s: Specs<T>): Connector
 }
 
 export function connectDnd<P>(Comp: React.ComponentClass<P>) {
-    // return DragDropContext(MultiBackend(HTML5toTouch))(Comp);
+    return DragDropContext(MultiBackend(HTML5toTouch))(Comp);
     // return DragDropContext(TouchBackend({ enableMouseEvents: true }))(Comp);
-    return DragDropContext(HTML5Backend)(Comp);
+    // return DragDropContext(HTML5Backend)(Comp);
 }
