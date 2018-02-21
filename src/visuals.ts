@@ -13,13 +13,15 @@ export type VisualSettings = typeof visualSettings;
 export const visualSettings = {
     palette: {
         blocks: [
-            "#3F2E56", // Big square
-            "#F7DD72", // Big corner
-            "#C6CA53", // Small square
+            "#3F2E56", // 3 square
+            "#C6CA53", // 2 square
+            "#F7DD72", // 3 corner
+            "#9BC1BC", // 2 corner
+            "#248230", // 5 plank
+            "#826a24", // 4 plank
+            "#ACACDE", // 3 plank
+            "#ABDAFC", // 2 plank
             "#ED6A5A", // Dot
-            "#9BC1BC", // Small corner
-            "#ACACDE", // Big plank
-            "#ABDAFC", // Small plank
         ],
         empty: "#EEEEEE",
         none: "rgba(0, 0, 0, 0)",
