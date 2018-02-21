@@ -135,6 +135,14 @@ export function columnsMtx<T>(mtx: Mtx<T>): T[][] {
         range(mtx.length).map(i => mtx[i][j]));
 }
 
+export function rotateClockwiseMtx<T>(mtx: Mtx<T>): Mtx<T> {
+    return columnsMtx(mtx.slice(0).reverse());
+}
+
+export function sameMtxs<T>(m1: Mtx<T>, m2: Mtx<T>): boolean {
+    return m1.length === m2.length && m1.every((row, i) => sameArrays(row, m2[i]));
+}
+
 export function sameArrays<T>(a1: T[], a2: T[]): boolean {
     return a1.length === a2.length
         && a1.every((x, i) => x === a2[i]);

@@ -1,68 +1,66 @@
-import { sameArrays, distinct, flatten, matricify, mapMtx, reduceMtx, subMtx } from "../utils";
+import { sameArrays, distinct, flatten, matricify, mapMtx, reduceMtx, subMtx, columnsMtx, range, sameMtxs, rotateClockwiseMtx } from "../utils";
 import { ShapeCell, Figure, Shape } from "./game";
 import { ColorCode } from "../visuals";
 
-export type ShapeFlat = ShapeCell[];
-const allShapes: ShapeFlat[] = [
+const allShapes: Shape[] = [
     [
-        1, 1, 1,
-        1, 1, 1,
-        1, 1, 1,
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
     ],
     [
-        1, 1, 1,
-        1, 0, 0,
-        1, 0, 0,
+        [1, 1, 1],
+        [1, 0, 0],
+        [1, 0, 0],
     ],
     [
-        1, 1, 0,
-        1, 1, 0,
-        0, 0, 0,
+        [1, 1, 0],
+        [1, 1, 0],
+        [0, 0, 0],
     ],
     [
-        1, 0, 0,
-        0, 0, 0,
-        0, 0, 0,
+        [1, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
     ],
     [
-        1, 1, 0,
-        1, 0, 0,
-        0, 0, 0,
+        [1, 1, 0],
+        [1, 0, 0],
+        [0, 0, 0],
     ],
     [
-        1, 0, 0,
-        1, 0, 0,
-        1, 0, 0,
+        [1, 0, 0],
+        [1, 0, 0],
+        [1, 0, 0],
     ],
     [
-        1, 0, 0,
-        1, 0, 0,
-        0, 0, 0,
+        [1, 0, 0],
+        [1, 0, 0],
+        [0, 0, 0],
     ],
 ];
 
-function rotate(shape: ShapeFlat): ShapeFlat {
-    const rotation = [6, 3, 0, 7, 4, 1, 8, 5, 2];
-    return rotation.map(i => shape[i]);
+export function rotate(shape: Shape) {
+    return rotateClockwiseMtx(shape);
 }
 
-export function canMoveUp(shape: ShapeFlat) {
-    return !shape[0] && !shape[1] && !shape[2];
+export function canMoveUp(shape: Shape) {
+    return shape[0].every(cell => cell === 0);
 }
 
-export function canMoveLeft(shape: ShapeFlat) {
-    return !shape[0] && !shape[3] && !shape[6];
+export function canMoveLeft(shape: Shape) {
+    return range(shape.length).every(i => shape[i][0] === 0);
 }
 
-export function moveUp(shape: ShapeFlat): ShapeFlat {
-    return shape.map((sc, i) => i < 6 ? shape[i + 3] : 0);
+export function moveUp(shape: Shape): Shape {
+    return shape.slice(1);
 }
 
-export function moveLeft(shape: ShapeFlat): ShapeFlat {
-    return shape.map((sc, i) => ((i + 1) % 3) !== 0 ? shape[i + 1] : 0);
+export function moveLeft(shape: Shape): Shape {
+    return shape.map(sc => sc.slice(1));
 }
 
-function normalize(shape: ShapeFlat): ShapeFlat {
+function normalize(shape: Shape): Shape {
     while (canMoveUp(shape)) {
         shape = moveUp(shape);
     }
@@ -74,13 +72,13 @@ function normalize(shape: ShapeFlat): ShapeFlat {
     return shape;
 }
 
-export function makeRotations(shape: ShapeFlat): ShapeFlat[] {
+export function makeRotations(shape: Shape): Shape[] {
     const r0 = normalize(shape);
     const r1 = normalize(rotate(r0));
     const r2 = normalize(rotate(r1));
     const r3 = normalize(rotate(r2));
 
-    return distinct<ShapeFlat>(sameArrays)([r0, r1, r2, r3]);
+    return distinct<Shape>(sameMtxs)([r0, r1, r2, r3]);
 }
 
 export function trimShape(shape: Shape): Shape {
@@ -108,11 +106,10 @@ export function makeFigure(color: ColorCode) {
     };
 }
 
-export function makeFigures(shapes: ShapeFlat[]): Figure[] {
+export function makeFigures(shapes: Shape[]): Figure[] {
     return flatten(shapes
         .map((shape, i) =>
             makeRotations(shape)
-                .map(matricify(3))
                 .map(trimShape)
                 .map(makeFigure(i))
             ));

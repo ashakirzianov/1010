@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { matricify, flatten, distinct, sameArrays, subMtx, columnsMtx } from "./utils";
+import { matricify, flatten, distinct, sameArrays, subMtx, columnsMtx, rotateClockwiseMtx } from "./utils";
 
 describe("Utils", () => {
     it("matricify", () => {
@@ -81,6 +81,19 @@ describe("Utils", () => {
             [2, 6, 0],
             [3, 7, 1],
             [4, 8, 2],
+        ]);
+    });
+
+    it("rotateClockwiseMtx", () => {
+        expect(rotateClockwiseMtx([
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 0, 1, 2],
+        ])).deep.eq([
+            [9, 5, 1],
+            [0, 6, 2],
+            [1, 7, 3],
+            [2, 8, 4],
         ]);
     });
 });
