@@ -133,7 +133,7 @@ function buildConnectorsPair<
 }
 
 export function buildConnectors<T extends Constraint<T>>(s: Specs<T>): Connectors<T> {
-    return mapObject(s, buildConnectorsPair);
+    return mapObject(s, buildConnectorsPair as any);
 }
 
 export function connectDnd<P>(Comp: React.ComponentClass<P>) {
