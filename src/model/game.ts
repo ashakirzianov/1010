@@ -17,6 +17,7 @@ export type Cell = EmptyCell | FullCell | ConflictCell;
 
 export type Board = {
     score: number,
+    bestScore: number,
     cells: Cell[][],
     availableFigures: Figure[],
     inHand: { figure: number, dragIdx: MtxIdx } | undefined,

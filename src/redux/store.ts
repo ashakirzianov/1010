@@ -10,7 +10,7 @@ const middleware = applyMiddleware(
 );
 
 function validateStore(restored: Store | undefined) {
-    return isGame(store) ? store : undefined;
+    return isGame(restored) ? restored : undefined;
 }
 
 const initial: Store = validateStore(restoreState()) || createGame();

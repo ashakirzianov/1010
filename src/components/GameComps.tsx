@@ -66,6 +66,7 @@ const NewGameComp: Comp<{}, {
 const GameOverComp: Comp<{
     over: boolean,
     score: number,
+    bestScore: number,
 }, {
         newGame: {},
     }> = props =>
@@ -81,7 +82,8 @@ const GameOverComp: Comp<{
                         </Line>
                         <Line>
                             <Medium>
-                                <Black>Best score: </Black><Green><Bold>0</Bold></Green>
+                                <Black>Best score: </Black>
+                                <Green><Bold>{props.bestScore}</Bold></Green>
                             </Medium>
                         </Line>
                     </Padded>
@@ -97,6 +99,7 @@ const BoardComp: Comp<Board, BoardActions> = props =>
             over={props.isGameOver}
             newGame={props.newGame}
             score={props.score}
+            bestScore={props.bestScore}
         />
         <ScoreComp score={props.score} />
         <CellsComp { ...props } />
