@@ -10,15 +10,15 @@ import { ColorCode } from "../visuals";
 export const defaultSettings: GameSettings = {
     figureBank: allFigures,
     boardSize: {
-        rows: 10,
-        cols: 10,
+        rows: 4,
+        cols: 4,
     },
     handSize: 3,
 };
 
 export function isGame(obj: object | undefined): obj is Game {
-    const game = obj as Partial<Game>;
-    return game.board !== undefined && isBoard(game.board);
+    const game = obj as Partial<Game> | undefined;
+    return game !== undefined && game.board !== undefined && isBoard(game.board);
 }
 
 function isBoard(obj: object): obj is Board {
@@ -40,6 +40,7 @@ export function createGame(settings: GameSettings = defaultSettings): Game {
 export function buildBoard(settings: GameSettings): Board {
     return {
         score: 0,
+        bestScore: 0,
         cells: range(settings.boardSize.rows).map(i =>
             range(settings.boardSize.cols).map<Cell>(j =>
                 ({ cell: "empty" }))),
@@ -150,6 +151,7 @@ export function updateGameOver(board: Board): Board {
     return isGameOver(board.cells, board.availableFigures)
         ? {
             ...board,
+            bestScore: Math.max(board.bestScore, board.score),
             isGameOver: true,
         }
         : { ...board };

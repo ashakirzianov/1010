@@ -15,11 +15,11 @@ const board = buildReducer<Board, ActionsTemplate>({
         new: tryPlaceCurrentFigure(s),
     }),
     newGame: (s, p) => ({
-        new: buildBoard(s.settings),
+        new: {
+            ...buildBoard(s.settings),
+            bestScore: s.bestScore,
+        },
     }),
-});
-
-const settings = buildPartialReducer<GameSettings, ActionsTemplate>({
 });
 
 export const reducer = combineReducers<Game, ActionsTemplate>({
