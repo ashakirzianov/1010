@@ -16,29 +16,44 @@ export const defaultSettings: GameSettings = {
     handSize: 3,
 };
 
+export function isGame(obj: object | undefined): obj is Game {
+    const game = obj as Partial<Game>;
+    return game.board !== undefined && isBoard(game.board);
+}
+
+function isBoard(obj: object): obj is Board {
+    const board = obj as Partial<Board>;
+    return board.score !== undefined
+        && board.cells !== undefined
+        && board.availableFigures !== undefined
+        && board.isGameOver !== undefined
+        && board.settings !== undefined
+        ;
+}
+
 export function createGame(settings: GameSettings = defaultSettings): Game {
     return {
         board: buildBoard(settings),
-        settings: settings,
     };
 }
 
-function buildBoard(settings: GameSettings): Board {
-    const nextHand = () => range(settings.handSize)
-        .map(i => pickRandom(settings.figureBank));
-
+export function buildBoard(settings: GameSettings): Board {
     return {
         score: 0,
         cells: range(settings.boardSize.rows).map(i =>
             range(settings.boardSize.cols).map<Cell>(j =>
                 ({ cell: "empty" }))),
-        availableFigures: nextHand(),
+        availableFigures: nextHand(settings),
         inHand: undefined,
         placePosition: undefined,
         isGameOver: false,
-        nextHand: nextHand,
-        nextGame: () => buildBoard(settings),
+        settings: settings,
     };
+}
+
+export function nextHand(settings: GameSettings): Figure[] {
+    return range(settings.handSize)
+        .map(i => pickRandom(settings.figureBank));
 }
 
 export function figureInHand(board: Board) {
@@ -104,7 +119,7 @@ export function placeCurrentFigure(board: Board): Board {
             cells: placeFigureOn(board.cells, figureInHand(board), diffIdx(board.placePosition, board.inHand.dragIdx)),
             score: board.score + scoreFigure(figureInHand(board)),
             availableFigures: letExp(removeAtIndex(board.availableFigures, board.inHand.figure), af =>
-                af.length === 0 ? board.nextHand() : af),
+                af.length === 0 ? nextHand(board.settings) : af),
             inHand: undefined,
         } : { ...board };
 }

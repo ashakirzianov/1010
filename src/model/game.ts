@@ -1,5 +1,6 @@
 import { ColorCode } from "../visuals";
 import { MtxIdx } from "../utils";
+import { settings } from "cluster";
 
 export type ShapeCell = 0 | 1;
 export type Shape = ShapeCell[][];
@@ -21,8 +22,7 @@ export type Board = {
     inHand: { figure: number, dragIdx: MtxIdx } | undefined,
     placePosition?: MtxIdx,
     isGameOver: boolean,
-    nextHand: () => Figure[],
-    nextGame: () => Board,
+    settings: GameSettings,
 };
 
 export type GameSettings = {
@@ -33,5 +33,4 @@ export type GameSettings = {
 
 export type Game = {
     board: Board,
-    settings: GameSettings,
 };

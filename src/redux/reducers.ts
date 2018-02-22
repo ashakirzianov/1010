@@ -1,7 +1,7 @@
-import { buildReducer, bugWorkaround, buildPartialReducer } from "./redux-utils";
+import { buildReducer, buildPartialReducer } from "./redux-utils";
 import { Board, Game, GameSettings } from "../model/game";
 import { ActionsTemplate } from "../model/actions";
-import { tryPlaceCurrentFigure } from "../model/logic";
+import { tryPlaceCurrentFigure, createGame, buildBoard } from "../model/logic";
 import { combineReducers } from "./react-redux-utils";
 
 const board = buildReducer<Board, ActionsTemplate>({
@@ -15,7 +15,7 @@ const board = buildReducer<Board, ActionsTemplate>({
         new: tryPlaceCurrentFigure(s),
     }),
     newGame: (s, p) => ({
-        new: s.nextGame(),
+        new: buildBoard(s.settings),
     }),
 });
 
@@ -24,5 +24,4 @@ const settings = buildPartialReducer<GameSettings, ActionsTemplate>({
 
 export const reducer = combineReducers<Game, ActionsTemplate>({
     board,
-    settings,
 });
