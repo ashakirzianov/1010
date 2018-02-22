@@ -1,4 +1,4 @@
-import { buildReducer, bugWorkaround, buildPartialReducer } from "./redux-utils";
+import { buildReducer, buildPartialReducer } from "./redux-utils";
 import { Board, Game, GameSettings } from "../model/game";
 import { ActionsTemplate } from "../model/actions";
 import { tryPlaceCurrentFigure } from "../model/logic";
