@@ -16,6 +16,21 @@ export const defaultSettings: GameSettings = {
     handSize: 3,
 };
 
+export function isGame(obj: object | undefined): obj is Game {
+    const game = obj as Partial<Game>;
+    return game.board !== undefined && isBoard(game.board);
+}
+
+function isBoard(obj: object): obj is Board {
+    const board = obj as Partial<Board>;
+    return board.score !== undefined
+        && board.cells !== undefined
+        && board.availableFigures !== undefined
+        && board.isGameOver !== undefined
+        && board.settings !== undefined
+        ;
+}
+
 export function createGame(settings: GameSettings = defaultSettings): Game {
     return {
         board: buildBoard(settings),
