@@ -10,8 +10,8 @@ import { ColorCode } from "../visuals";
 export const defaultSettings: GameSettings = {
     figureBank: allFigures,
     boardSize: {
-        rows: 4,
-        cols: 4,
+        rows: 10,
+        cols: 10,
     },
     handSize: 3,
 };
