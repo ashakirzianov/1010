@@ -52,7 +52,7 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "express": "^4.16.2",
     "lodash": "^4.17.5",
-    "mocha": "^4.1.0",
+    "mocha": "^10.2.0",
     "radium": "^0.19.6",
     "react": "^16.2.0",
     "react-dnd": "^2.5.4",
